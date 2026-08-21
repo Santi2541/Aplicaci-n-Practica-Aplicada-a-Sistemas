@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane prefHeight="412.0" prefWidth="570.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.all10.controller.all10controller">
+
+    <top>
+        <VBox spacing="25" styleClass="top-container" stylesheets="@style.css">
+
+            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="header">
+
+                   <StackPane styleClass="timer-container">
+                    <Label alignment="CENTER" prefHeight="17.0" prefWidth="21.0" styleClass="timer-icon" text="⏱" />
+                </StackPane>
+   
+                    <Label styleClass="timer-label" text="02:14" />
+
+                   <Region HBox.hgrow="ALWAYS" />
+
+                   <Label styleClass="hint-icon" text="💡" />
+
+                   <Label styleClass="hint-label" text="Pistas" />
+
+                   <HBox alignment="CENTER" spacing="4" styleClass="hint-dots">
+
+                       <Label styleClass="hint-dot" />
+                    <Label styleClass="hint-dot" />
+                    <Label styleClass="hint-dot" />
+
+                   </HBox>
+
+               </HBox>
+
+
+            <HBox alignment="CENTER" spacing="18.0" styleClass="level-indicators">
+
+                            <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="1" />
+                </StackPane>
+
+                            <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="2" />
+                </StackPane>
+
+                            <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="3" />
+                </StackPane>
+
+                            <StackPane maxWidth="46.0" prefWidth="46.0" styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="4" />
+                </StackPane>
+
+                            <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="5" />
+                </StackPane>
+
+                            <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="21.0" text="6" />
+                </StackPane>
+
+                <StackPane styleClass="number-indicator">
+               <children>
+                       <Label alignment="CENTER" prefHeight="34.0" prefWidth="20.0" text="7" />
+               </children>
+                </StackPane>
+
+                <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="8" />
+                </StackPane>
+
+                            <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="9" />
+                </StackPane>
+
+                            <StackPane styleClass="number-indicator">
+                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="26.0" text="10" />
+                </StackPane>
+
+                        </HBox>
+
+           </VBox>
+    </top>
+
+
+    <center>
+        <VBox alignment="CENTER" spacing="45" styleClass="game-container" stylesheets="@style.css">
+
+            <StackPane styleClass="expression-container" />
+         <Label id="expressionLabel" fx:id="expressionLabel" prefHeight="44.0" prefWidth="278.0" styleClass="expression-label" wrapText="true" />
+
+
+            <HBox alignment="CENTER" spacing="36" styleClass="numbers-container">
+
+                <Button fx:id="numberButton1" onAction="#onNumber3" styleClass="number-button number-one" text="3" />
+
+                <Button fx:id="numberButton2" onAction="#onNumber6" styleClass="number-button number-two" text="6" />
+
+                <Button fx:id="numberButton3" onAction="#onNumber9" styleClass="number-button number-three" text="9" />
+
+                <Button fx:id="numberButton4" onAction="#onNumber2" styleClass="number-button number-four" text="2" />
+
+            </HBox>
+
+
+            <HBox alignment="CENTER" spacing="18" styleClass="operators-container">
+
+                <Button fx:id="addButton" onAction="#onAdd" styleClass="operator-button" text="+" />
+
+                <Button fx:id="subtractButton" onAction="#onSubtract" styleClass="operator-button" text="-" />
+
+                <Button fx:id="multiplyButton" onAction="#onMultiply" styleClass="operator-button" text="*" />
+
+                <Button fx:id="divideButton" onAction="#onDivide" styleClass="operator-button" text="÷" />
+
+                <Button fx:id="openParenthesisButton" onAction="#onOpenParenthesis" styleClass="operator-button" text="(" />
+
+                <Button fx:id="closeParenthesisButton" onAction="#onCloseParenthesis" styleClass="operator-button" text=")" />
+
+            </HBox>
+           <HBox alignment="CENTER" spacing="35" styleClass="legend">
+   
+               <HBox alignment="CENTER" spacing="8">
+   
+                   <Label styleClass="legend-correct-icon" text="✓" />
+   
+                   <Label styleClass="legend-label" text="Correcto" />
+   
+               </HBox>
+   
+   
+               <HBox alignment="CENTER" spacing="8">
+   
+                   <Label styleClass="legend-incorrect-icon" text="×" />
+   
+                   <Label styleClass="legend-label" text="Incorrecto" />
+   
+               </HBox>
+   
+   
+               <HBox alignment="CENTER" spacing="8">
+   
+                   <Label styleClass="legend-hint-icon" text="💡" />
+   
+                   <Label styleClass="legend-label" text="Pista usada" />
+   
+               </HBox>
+   
+           </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
