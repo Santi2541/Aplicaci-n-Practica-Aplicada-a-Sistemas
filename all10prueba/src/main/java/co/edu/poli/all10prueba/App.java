@@ -1,8 +1,10 @@
-""" 
+/*
 (Ejemplo de tarea en la rama REVISION) Nicol tiene que solucionar un error donde el programa
 no abre el escenario que deberia, solo abre una pantalla donde dice "primary" y solo da la opción de un boton
 (La solución sería cambiar en el metodo "start" el atributo de "scene", en vez de cargar un "primary" debe poner el nombre del escenario realizado <escenario1>)
-"""
+*/
+
+/* (ejemplo PAS 88) Santiago anturi resolvió el problema porque nicol no estaba disponible. Se cambió el "primary" por "escenario1" */
 
 package co.edu.poli.all10prueba;
 
