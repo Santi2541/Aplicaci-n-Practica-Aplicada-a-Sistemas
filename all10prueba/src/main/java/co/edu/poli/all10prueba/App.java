@@ -5,6 +5,7 @@ no abre el escenario que deberia, solo abre una pantalla donde dice "primary" y 
 */
 
 /* (ejemplo PAS 88) Santiago anturi resolvió el problema porque nicol no estaba disponible. Se cambió el "primary" por "escenario1" */
+/*hola a todos buenos dias */
 
 package co.edu.poli.all10prueba;
 
