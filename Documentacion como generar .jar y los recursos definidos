@@ -1,0 +1,71 @@
+Recursos a incluir en el empacado (.jar)
+Imágenes
+
+Fichas numéricas (1–9) en formato PNG con transparencia
+
+Fondo del tablero de juego
+
+Iconos de UI: reiniciar, deshacer, ayuda/instrucciones, sonido on/off, configuración
+
+Logo/ícono de la aplicación (para el ejecutable y ventana)
+
+Ubicación en el proyecto: src/principal/recursos/imágenes/ → se empequetan automatiamente en el classpath del .jar y se cargan con getClass().getResourceAsStream(...), no con rutas de archivo absolutas (para que funciona igual dentro y fuera del IDE)
+
+Base de datos
+
+Motor recomendado: SQLite (embebida, un solo archivo, sin servidor externo) — ideal para distribuir junto con un .jar
+
+Alternativa: H2 embebido, si prefieren manejo 100% Java sin binarios nativos
+
+Qué va en el paquete:
+
+Controlador JDBC (org.xerial:sqlite-jdbc) como dependencia Maven, incluido el jar mediante complemento maven-shade o maven-assembly-plugin (frasco)
+
+Script de creacion de esquema (esquema.sql) como recurso, ejecutado la primera vez que corre la app
+
+No empequetar el archivo .db con datos: se crea vacío en tiempo de ejecución en una alfombra de datos del usuario (ej. %APPDATA%/AllTen/ o ~/.allten/)
+
+Tablas mínimas sugeridas: partidas (historial), puntuaciones (mejores puntos), configuración (preferencias del usuario)
+
+empacado
+
+Usar complemento maven-shade para generar un.jar ejecutable único que incluye: código compilado + imágenes + driver JDBC + dependencias
+
+Verificador Clase principal en el manifiesto para que java -jar AllTen.jar función sin configuración adicional
+
+El como generar un archivo .jar ejecutable desde ecplipse/maven, se debe configurar el complementomaven-jar-plugin o maven-assembly-plugin en tu archivo pom.xml y luego ejecutar los comandos de compilación de Maven.
+
+Aqui más raro lo que se deberia pegar en el archivo pom.xml, <build>
+    <plugins>
+
+        <plugin>
+
+            <groupId>org.apache.maven.plugins</groupId>
+
+            <artifactId>maven-jar-plugin</artifactId>
+
+            <version>3.3.0</version>
+
+            <configuración>
+
+                <archivo>
+
+                    <manifest>
+
+                        <addClasspath>true</addClasspath>
+
+                        <!-- Reemplaza con la ruta completa de tu clase Main --> <mainClass>com.tuempresa.proyecto.MainClass</mainClass>
+
+                    </manifest>
+
+                </archive>
+
+            </configuration>
+
+        </plugin>
+
+    </plugins>
+
+</build>
+
+También un video que se uso para ver como se realiza y tomarlo de ejemplo: https://youtu.be/j7dkW_edT18?si=2IomC5fWdFz7RECH
