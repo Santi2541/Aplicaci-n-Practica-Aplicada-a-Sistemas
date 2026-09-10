@@ -1,0 +1,88 @@
+1. Introducción
+
+Este documento describe el proceso detallado para la instalación, configuración y verificación de
+MySQL Community Server. El objetivo es preparar un entorno de desarrollo funcional, incluyendo las
+herramientas de gestión necesarias y la ejecución de una prueba básica de funcionamiento para
+confirmar la operatividad del sistema.
+
+2. Descarga del Software
+El primer paso consiste en obtener los binarios desde el portal oficial de MySQL Community
+Downloads. Se recomienda encarecidamente utilizar una cuenta de Oracle Web Account, la cual
+otorga beneficios exclusivos para desarrolladores, tales como:
+Acceso acelerado a las descargas del software de MySQL.
+Disponibilidad de documentación técnica (White Papers) y presentaciones avanzadas.
+Participación activa en los foros de discusión de la comunidad MySQL.
+Capacidad para reportar y realizar el seguimiento de incidencias (bugs) en el sistema oficial.
+
+3. Proceso de Instalación
+
+Una vez descargado el instalador, se procede a su ejecución a través de la herramienta MySQL
+Installer. Durante la fase de selección de productos, se añaden los componentes esenciales para el
+entorno. Para esta configuración, los paquetes seleccionados incluyen:
+MySQL Server 8.0: El motor principal y servicio central de la base de datos.
+MySQL Workbench 8.0: La interfaz gráfica de usuario (GUI) esencial para la administración,
+diseño de diagramas y desarrollo SQL.
+MySQL Shell & Router: Herramientas avanzadas para la gestión interactiva y el enrutamiento
+seguro de consultas.
+Documentación y Ejemplos: Archivos de soporte y bases de datos de muestra para facilitar el
+aprendizaje.
+
+4. Configuración de Red y del Servidor
+En la etapa de Type and Networking, se establecen los parámetros operativos del servidor. Para
+propósitos de pruebas y desarrollo local, se selecciona el tipo de configuración Development
+Computer, lo cual balancea y optimiza el uso de recursos del sistema en un entorno no productivo.
+La conectividad se configura mediante el protocolo TCP/IP, utilizando el puerto estándar 3306 para
+conexiones clásicas y el puerto 33060 para el X Protocol. Es fundamental asegurar que la opción para
+abrir los puertos en el Firewall de Windows esté habilitada para permitir la correcta comunicación y el
+acceso por red al servidor.
+
+5. Verificación y Prueba Básica en MySQL Workbench
+Para comprobar que la instalación se ha realizado con éxito, se inicia MySQL Workbench
+conectándolo a la instancia local. A continuación, se presenta un ejercicio de validación en el que se
+crea una base de datos de prueba y se manipulan registros elementales.
+Recomendación de Ejecución: Se aconseja ejecutar el código sentencia por sentencia (línea
+por línea) en lugar de lanzar todo el bloque simultáneamente. Esta práctica facilita la comprensión
+del proceso y ayuda a prevenir o aislar errores de sintaxis si alguna línea requiere modificaciones
+posteriores.
+
+La siguiente prueba ilustra la interacción básica con el lenguaje SQL:
+Creación: Se genera la base de datos denominada Juego.
+Estructuración: Se define una tabla llamada inventario con dos columnas: nombre (tipo
+VARCHAR de hasta 50 caracteres) y cantidad (tipo INT numérico).
+Inserción: Se introducen artículos de muestra en el inventario.
+Consulta: Se utiliza la sentencia SELECT para visualizar los datos consolidados y garantizar que la
+base de datos los guardó exitosamente.
+
+CREATE DATABASE Juego;
+USE Juego;
+
+CREATE TABLE Inventario (
+nombre VARCHAR (50),
+poder int
+);
+
+INSERT INTO Inventario (nombre, poder) VALUES ('Espada de Fuego', 100);
+INSERT INTO Inventario (nombre, poder) VALUES ('Escudo de Hielo', 50);
+INSERT INTO Inventario (nombre, poder) VALUES ('Poción Curativa', 20);
+
+SELECT * FROM Inventario;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
