@@ -1,0 +1,61 @@
+## Documentación sobre el algoritmo de generación de tableros validos
+Inicio Arranque del proceso de generación.
+2. Generar candidato Se generan 4 números aleatorios dentro del rango definido (1 al 9).
+3.Evaluar combinaciones Se prueban todas las formas posibles de combinar los 4 números: 24 permutaciones × 5 formas de agrupación (estructuras/paréntesis) × 64 combinaciones de operadores (4³, para +, −, ×, ÷ en las 3 posiciones) = 7.680 combinaciones evaluadas por candidato.
+4. ¿Cubre del 1 al 10? Se valida si, entre todas las combinaciones evaluadas, existe al menos una forma de obtener cada número entero del 1 al 10.
+4.1 No El candidato se descarta y el proceso vuelve a "Generar candidato".
+4.2 Sí El tablero se considera válido y continúa al siguiente paso.
+5. Guardar tablero válido El tablero (los 4 números) se almacena en el conjunto de tableros válidos generados.
+6. ¿Ya hay "n" tableros? Se valida si ya se alcanzó la cantidad objetivo de tableros válidos (n).
+6.1 No Se vuelve a "Generar candidato" para producir otro tablero.
+6.2 Sí El proceso finaliza.
+7. Fin Cierre del proceso de generación.
+
+## Diagrama de flujo
+
+```mermaid
+flowchart TD
+    A([Inicio]) --> B[Generar candidato<br/>4 números en el rango definido del 1 al 9]
+    B --> C[Evaluar combinaciones<br/>permutaciones, formas y operadores<br/>24 × 5 × 64 = 7.680]
+    C --> D{¿Cubre del<br/>1 al 10?}
+    D -- No --> B
+    D -- Sí --> E[Guardar tablero válido]
+    E --> F{¿Ya hay<br/>"n" tableros?}
+    F -- No --> B
+    F -- Sí --> G([Fin])
+```
+
+## Descripción paso a paso
+
+| Paso | Nombre | Descripción |
+|------|--------|-------------|
+| 1 | **Inicio** | Arranque del proceso de generación. |
+| 2 | **Generar candidato** | Se generan 4 números aleatorios dentro del rango definido (1 al 9). |
+| 3 | **Evaluar combinaciones** | Se prueban todas las formas posibles de combinar los 4 números: 24 permutaciones × 5 formas de agrupación (estructuras/paréntesis) × 64 combinaciones de operadores (4³, para +, −, ×, ÷ en las 3 posiciones) = **7.680 combinaciones evaluadas** por candidato. |
+| 4 | **¿Cubre del 1 al 10?** | Se valida si, entre todas las combinaciones evaluadas, existe al menos una forma de obtener cada número entero del 1 al 10. |
+| 4.1 | → No | El candidato se descarta y el proceso vuelve a "Generar candidato". |
+| 4.2 | → Sí | El tablero se considera válido y continúa al siguiente paso. |
+| 5 | **Guardar tablero válido** | El tablero (los 4 números) se almacena en el conjunto de tableros válidos generados. |
+| 6 | **¿Ya hay "n" tableros?** | Se valida si ya se alcanzó la cantidad objetivo de tableros válidos (**n**). |
+| 6.1 | → No | Se vuelve a "Generar candidato" para producir otro tablero. |
+| 6.2 | → Sí | El proceso finaliza. |
+| 7 | **Fin** | Cierre del proceso de generación. |
+
+## Complejidad del proceso de evaluación
+
+Por cada candidato de 4 números se evalúan:
+
+- **24** permutaciones (4! órdenes distintos de los números)
+- **5** formas de agrupación de la expresión
+- **64** combinaciones de operadores (4 operadores elevados a las 3 posiciones entre los 4 números: 4³)
+
+**Total por candidato:** 24 × 5 × 64 = **7.680 combinaciones**
+
+## Puntos pendientes por definir
+
+- [ ] Criterio exacto de "cubre del 1 al 10": si cada número entero del rango debe poder obtenerse al menos una vez.
+- [ ] Si **n** es un parámetro configurable (cantidad de tableros por partida/nivel) o un valor fijo del sistema.
+- [ ] Manejo de casos donde un candidato no logra cubrir el rango tras múltiples intentos (¿límite de reintentos o timeout?).
+- [ ] Confirmar si los operadores permitidos son únicamente +, −, ×, ÷, o si se contemplan otros (potencias, raíces, etc.).
+- [ ] Mecanismo para evitar tableros duplicados dentro del conjunto ya guardado.
+
