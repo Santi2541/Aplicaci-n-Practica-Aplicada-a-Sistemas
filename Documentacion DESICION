@@ -1,0 +1,31 @@
+Decisiones de Arquitectura y Stack Tecnológico
+Base de Datos (MySQL): Se seleccionó un modelo relacional MySQL debido a la estructura clara e interrelacionada del juego (Usuarios, Desafíos Diarios, Partes y Estadísticas). Garantiza integrida referencial y permite generar tablas de clasificación (Leaderboards) eficiente mediante consultas de ordenamiento SQL.
+
+Lenguaje y Entorno (Java + Eclipse): Desarrollo en Java aplicando programación orientada a objetos para modularizar la luz del juego. Se estandarizó Eclipse como IDE de desarrollo para el equipo con configuraciones compartidas de formato de código.
+
+Control de Versiones (GitHub): Gestión del código en repositorio remoto utilizando flujo basado en ramas (Ramas destacadas). Cada funcionalidad o tarea se trata en una rama independiente vinculada al ticket correspondiente.
+
+Metodología y Gestión (Jira + Sprints): Organización del proyecto bajo marco ágil (Scrum). Avance en Sprints con seguimiento de tareas mediante flujo de estados (Hacer, En progreso, Revisión de código, Hecho).
+
+Criterios Técnicos de Implementación
+
+Patrón de Diseño para Datos (DAO): Desacople total entre la interfaz/lógica del juego y la persistencia de datos mediados el patrón Objeto de acceso a datos (DAO) en Java.
+
+Seguridad y Consultas: Uso obligatorio de Declaración preparada con la biblioteca JDBC de MySQL para prevenir ataques de Inyección SQL y mejorar la eficiencia en la ejecución de consultas repetitivas.
+
+Manejo de Transacciones y Conexiones: Encapsulamiento de conexiones a la base de datos MySQL controlando apertura y cerca explicito de recursos (Conexión, Declaración preparada, Conjunto de resultados) mediante bloques prueba con recursos.
+
+Estructura y Restricciones BD: Aplicación de restricciones de unidad (ej. ÚNICO(usuario_id, desafio_id)) para impedir registros duplicados de un mismo usuario en el destino del día.
+
+Estrategia de Compromisos y RP:
+
+Los mensajes de compromiso en Git deben iniciar obligatoriamento con la clave de Jira (ej: PAS-101: Agrega documentación de decisiones de diseño).
+
+Integración a la rama principal únicamente mediante Solicitudes de extracción revisados por el equipo.
+
+Criterios de calidad y colaboración
+
+Trazabilidad Git - Jira: Cada mensaje de confirmación (comprometerse) debe iniciar obligatoriamento con la clave de la tarea asignada en Jira (ejemplo: PAS-101: Implementa criterios de arquitectura).
+
+Integracion de Codigo: La rama principal (principal) solo acepta cambios válidos mediados Solicitudes de extracción (PR), requiriendo la revisión de al menos un compañero de equipo antes de fusionar el código.
+El equipo utiliza Java como lenguaje principal y adopta convenciones de nomenclatura consistentes. Las clases utilizan PascalCase, los métodos y variables camelCase, las constantes MAYÚSCULAS_CON_GUION_BAJO, los paquetes en minúscula y las tablas/columnas de la base de datos en snake_case. La aplicación seguirá una estructura organizada por paquetes y se utiliza comentarios y documentación únicamente cuando ayuda claridad.

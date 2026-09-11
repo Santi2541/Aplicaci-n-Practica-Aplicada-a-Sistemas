@@ -1,0 +1,27 @@
+Para importar y abrir tu proyecto de Git directamente en Eclipse, sigue estos pasos detallados:
+
+Paso 1: Copiar la URL del repositorio
+
+Ve a tu repositorio en GitHub, haz clic en el botón verde "Code" y copia la URL HTTPS que aparece allí.
+
+Paso 2: Abrir la perspectiva de Git en Eclipse
+
+Abre Eclipse. En la esquina superior derecha, busca el botón de perspectivas (suele tener un ícono con un signo de más y una ventana) o ve al menú superior: Window > Perspective > Open Perspective > Other... y selecciona Git.
+
+Paso 3: Clonar el repositorio
+
+En la ventana de Git Repositories (generalmente abajo a la izquierda), haz clic en el enlace que dice "Clone a Git repository". Se abrirá una ventana automática donde se pegará la URL que copiaste de GitHub.
+
+Paso 4: Seleccionar tu rama (Santiago) o (pruebas)
+
+Durante el asistente de clonación, Eclipse te pedirá que selecciones las ramas que deseas descargar; asegúrate de marcar o seleccionar tu rama Santiago y continúa hasta finalizar para que se descargue el proyecto en tu computadora.
+
+Paso 5: Importar el proyecto al espacio de trabajo
+
+Haz clic derecho sobre el repositorio ya clonado en la lista y selecciona "Import Projects...".
+
+Paso 6: Finalizar la importación
+
+Selecciona la opción de "Import existing Eclipse projects" o usa la detección general, asegúrate de que apunte a la carpeta de tu proyecto clonado y haz clic en Finish. El proyecto aparecerá en tu Package Explorer listo para trabajar.
+
+Paso 7: correrlo con total normalidad en la parte donde tengas el .java de pruebas y listo
