@@ -1,71 +1,35 @@
-Recursos a incluir en el empacado (.jar)
-Imágenes
+# Guía de Empaquetado: Aplicación Java (Eclipse) y Base de Datos (MySQL)
 
-Fichas numéricas (1–9) en formato PNG con transparencia
+## Objetivo
+Establecer el procedimiento estándar del equipo para generar los archivos ejecutables y de respaldo necesarios para desplegar la aplicación en otros entornos para la entrega final. 
+El resultado serán dos archivos: un `.jar` (Aplicación) y un `.sql` (Base de Datos).
 
-Fondo del tablero de juego
 
-Iconos de UI: reiniciar, deshacer, ayuda/instrucciones, sonido on/off, configuración
+## Parte 1: Empaquetar la Aplicación Java (.jar)
+*Este proceso compila el código y empaqueta las dependencias (como el conector JDBC) en un solo archivo ejecutable.*
 
-Logo/ícono de la aplicación (para el ejecutable y ventana)
+**Procedimiento en Eclipse:**
+1. En el *Package Explorer* (panel izquierdo), haz clic derecho sobre la carpeta principal del proyecto.
+2. Selecciona **Export...**
+3. Despliega la carpeta **Java**, selecciona **Runnable JAR file** y haz clic en **Next**.
+4. En la ventana de configuración, llena los siguientes campos:
+   - **Launch configuration:** Selecciona la clase principal de nuestro proyecto (la que contiene el método `public static void main`).
+   - **Export destination:** Haz clic en *Browse* y elige dónde guardar el archivo, nombrándolo por ejemplo: `App_Proyecto.jar`.
+   - **Library handling:** Selecciona obligatoriamente la opción **"Extract required libraries into generated JAR"**. *(Esto asegura que el driver de MySQL viaje dentro del programa).*
+5. Haz clic en **Finish**. (Si salen advertencias de compilación, puedes darle a OK si el programa corre bien localmente).
 
-Ubicación en el proyecto: src/principal/recursos/imágenes/ → se empequetan automatiamente en el classpath del .jar y se cargan con getClass().getResourceAsStream(...), no con rutas de archivo absolutas (para que funciona igual dentro y fuera del IDE)
 
-Base de datos
+## Parte 2: Exportar la Base de Datos (.sql)
+*Este proceso genera un script con la estructura (tablas/relaciones) y los datos actuales para clonar la base de datos en otra máquina.*
 
-Motor recomendado: SQLite (embebida, un solo archivo, sin servidor externo) — ideal para distribuir junto con un .jar
+### Opción uno: Usando MySQL Workbench (Interfaz Gráfica)
+1. Abre MySQL Workbench y conéctate al servidor local.
+2. En el menú superior, ve a **Server > Data Export**.
+3. En la sección *Tables to Export*, marca la casilla de nuestra base de datos.
+4. Más abajo, selecciona **"Export to Self-Contained File"** y elige la ruta donde guardar el archivo (ej. `backup_proyecto.sql`).
+5. Asegúrate de que esté marcada la opción "Dump Structure and Data" (o al menos Structure si solo quieren las tablas vacías).
+6. Haz clic en el botón **"Start Export"**.
 
-Alternativa: H2 embebido, si prefieren manejo 100% Java sin binarios nativos
-
-Qué va en el paquete:
-
-Controlador JDBC (org.xerial:sqlite-jdbc) como dependencia Maven, incluido el jar mediante complemento maven-shade o maven-assembly-plugin (frasco)
-
-Script de creacion de esquema (esquema.sql) como recurso, ejecutado la primera vez que corre la app
-
-No empequetar el archivo .db con datos: se crea vacío en tiempo de ejecución en una alfombra de datos del usuario (ej. %APPDATA%/AllTen/ o ~/.allten/)
-
-Tablas mínimas sugeridas: partidas (historial), puntuaciones (mejores puntos), configuración (preferencias del usuario)
-
-empacado
-
-Usar complemento maven-shade para generar un.jar ejecutable único que incluye: código compilado + imágenes + driver JDBC + dependencias
-
-Verificador Clase principal en el manifiesto para que java -jar AllTen.jar función sin configuración adicional
-
-El como generar un archivo .jar ejecutable desde ecplipse/maven, se debe configurar el complementomaven-jar-plugin o maven-assembly-plugin en tu archivo pom.xml y luego ejecutar los comandos de compilación de Maven.
-
-Aqui más raro lo que se deberia pegar en el archivo pom.xml, <build>
-    <plugins>
-
-        <plugin>
-
-            <groupId>org.apache.maven.plugins</groupId>
-
-            <artifactId>maven-jar-plugin</artifactId>
-
-            <version>3.3.0</version>
-
-            <configuración>
-
-                <archivo>
-
-                    <manifest>
-
-                        <addClasspath>true</addClasspath>
-
-                        <!-- Reemplaza con la ruta completa de tu clase Main --> <mainClass>com.tuempresa.proyecto.MainClass</mainClass>
-
-                    </manifest>
-
-                </archive>
-
-            </configuration>
-
-        </plugin>
-
-    </plugins>
-
-</build>
-
-También un video que se uso para ver como se realiza y tomarlo de ejemplo: https://youtu.be/j7dkW_edT18?si=2IomC5fWdFz7RECH
+### Opción B: Usando la Terminal (Consola)
+Si se prefiere hacer por línea de comandos, abrir la terminal y ejecutar:
+```bash mysqldump -u root -p NombreDeNuestraBaseDeDatos > backup_proyecto.sql

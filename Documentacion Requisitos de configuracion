@@ -1,0 +1,28 @@
+Requisitos de Configuración de MySQL para el Entorno de Desarrollo y Despliegue
+
+## Objetivo
+Garantizar que los ejecutables del proyecto (`.jar`) funcionen correctamente en los equipos de todos los desarrolladores y en el entorno de evaluación final, estandarizando los parámetros de conexión de MySQL.
+
+## Parámetros Obligatorios del Servidor MySQL
+Para que la aplicación logre conectarse exitosamente a la base de datos tras ser empaquetada, el servidor MySQL local del equipo destino debe cumplir con la siguiente configuración:
+
+### 1. Host y Puerto
+* **Host:** `localhost` (o `127.0.0.1`)
+* **Puerto:** `3306`
+* *Nota:* Si el puerto 3306 está ocupado por otro servicio (como otro motor de base de datos), debe liberarse o reconfigurarse MySQL para usar este puerto estándar.
+
+### 2. Base de Datos (Schema)
+* **Nombre exacto:** El nombre de la base de datos debe coincidir exactamente con el definido en el diagrama de arquitectura y en la cadena JDBC (sensible a mayúsculas/minúsculas).
+* **Restauración:** Antes de ejecutar el proyecto, se debe importar el script `.sql` oficial del Sprint para crear la estructura de tablas necesaria.
+
+### 3. Estandarización de Credenciales
+Para evitar errores de "Acceso Denegado" (`Access denied for user`), el equipo utilizará credenciales homologadas en el entorno local durante el desarrollo:
+* **Usuario:** `root`
+* **Contraseña:** `root` *(o dejarla vacía `""`, según el acuerdo final del equipo antes de la compilación).*
+
+### 4. Cadena de Conexión (JDBC URL)
+La URL de conexión dentro del código Java (antes de compilar a `.jar`) debe tener la siguiente estructura, incluyendo los parámetros de zona horaria y SSL para evitar bloqueos del driver:
+
+```java
+// Ejemplo de la cadena estandarizada
+String url = "jdbc:mysql://localhost:3306/NombreBaseDeDatos?useSSL=false&serverTimezone=UTC";
