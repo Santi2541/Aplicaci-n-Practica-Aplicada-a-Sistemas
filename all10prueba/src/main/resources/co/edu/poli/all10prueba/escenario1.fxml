@@ -1,161 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="412.0" prefWidth="570.0" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.all10.controller.all10controller">
-
-    <top>
-        <VBox spacing="25" styleClass="top-container" stylesheets="@style.css">
-
-            <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="header">
-
-                   <StackPane styleClass="timer-container">
-                    <Label alignment="CENTER" prefHeight="17.0" prefWidth="21.0" styleClass="timer-icon" text="⏱" />
-                </StackPane>
-   
-                    <Label styleClass="timer-label" text="02:14" />
-
-                   <Region HBox.hgrow="ALWAYS" />
-
-                   <Label styleClass="hint-icon" text="💡" />
-
-                   <Label styleClass="hint-label" text="Pistas" />
-
-                   <HBox alignment="CENTER" spacing="4" styleClass="hint-dots">
-
-                       <Label styleClass="hint-dot" />
-                    <Label styleClass="hint-dot" />
-                    <Label styleClass="hint-dot" />
-
-                   </HBox>
-
-               </HBox>
-
-
-            <HBox alignment="CENTER" spacing="18.0" styleClass="level-indicators">
-
-                            <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="1" />
-                </StackPane>
-
-                            <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="2" />
-                </StackPane>
-
-                            <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="3" />
-                </StackPane>
-
-                            <StackPane maxWidth="46.0" prefWidth="46.0" styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="4" />
-                </StackPane>
-
-                            <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="5" />
-                </StackPane>
-
-                            <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="21.0" text="6" />
-                </StackPane>
-
-                <StackPane styleClass="number-indicator">
+<VBox alignment="TOP_CENTER" spacing="15.0" styleClass="root-container" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.all10.controller.all10controller">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      
+      <!-- 2. BLOQUE SUPERIOR: Encabezado -->
+      <HBox alignment="CENTER" spacing="10.0">
+         <children>
+            <!-- Indicador de Tiempo -->
+            <VBox alignment="CENTER_LEFT">
                <children>
-                       <Label alignment="CENTER" prefHeight="34.0" prefWidth="20.0" text="7" />
+                  <Label fx:id="lblTiempo" styleClass="texto-tiempo" text="⏰ 00:00" textFill="#7c3aed" />
+                  <Label styleClass="subtexto-gris" text="TIEMPO" textFill="#a78bfa" />
                </children>
-                </StackPane>
-
-                <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="8" />
-                </StackPane>
-
-                            <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="20.0" text="9" />
-                </StackPane>
-
-                            <StackPane styleClass="number-indicator">
-                    <Label alignment="CENTER" prefHeight="30.0" prefWidth="26.0" text="10" />
-                </StackPane>
-
-                        </HBox>
-
-           </VBox>
-    </top>
-
-
-    <center>
-        <VBox alignment="CENTER" spacing="45" styleClass="game-container" stylesheets="@style.css">
-
-            <StackPane styleClass="expression-container" />
-         <Label id="expressionLabel" fx:id="expressionLabel" prefHeight="44.0" prefWidth="278.0" styleClass="expression-label" wrapText="true" />
-
-
-            <HBox alignment="CENTER" spacing="36" styleClass="numbers-container">
-
-                <Button fx:id="numberButton1" onAction="#onNumber3" styleClass="number-button number-one" text="3" />
-
-                <Button fx:id="numberButton2" onAction="#onNumber6" styleClass="number-button number-two" text="6" />
-
-                <Button fx:id="numberButton3" onAction="#onNumber9" styleClass="number-button number-three" text="9" />
-
-                <Button fx:id="numberButton4" onAction="#onNumber2" styleClass="number-button number-four" text="2" />
-
+            </VBox>
+            
+            <Region prefHeight="34.0" prefWidth="60.0" HBox.hgrow="ALWAYS" />
+            
+            <!-- Título Central -->
+            <VBox alignment="CENTER">
+               <children>
+                  <Label styleClass="titulo-principal" text="AllTen">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label styleClass="subtexto-gris" text="Operaciones combinadas" />
+               </children>
+            </VBox>
+            
+            <Region prefHeight="34.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
+            
+            <!-- Sección Pistas -->
+            <HBox alignment="CENTER" spacing="5.0" styleClass="card-pistas">
+               <children>
+                  <Label text="💡 Pistas" textFill="#fcd34d" />
+                  <Label text="⚪ ⚪ ⚪" />
+               </children>
             </HBox>
+         </children>
+      </HBox>
 
-
-            <HBox alignment="CENTER" spacing="18" styleClass="operators-container">
-
-                <Button fx:id="addButton" onAction="#onAdd" styleClass="operator-button" text="+" />
-
-                <Button fx:id="subtractButton" onAction="#onSubtract" styleClass="operator-button" text="-" />
-
-                <Button fx:id="multiplyButton" onAction="#onMultiply" styleClass="operator-button" text="*" />
-
-                <Button fx:id="divideButton" onAction="#onDivide" styleClass="operator-button" text="÷" />
-
-                <Button fx:id="openParenthesisButton" onAction="#onOpenParenthesis" styleClass="operator-button" text="(" />
-
-                <Button fx:id="closeParenthesisButton" onAction="#onCloseParenthesis" styleClass="operator-button" text=")" />
-
+      <!-- 3. MÓDULO DE OBJETIVOS / PASOS -->
+      <VBox spacing="8.0" styleClass="card-blanca">
+         <children>
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Label styleClass="titulo-seccion-morado" text="OBJETIVOS" textFill="#7c3aed" />
+                  <Region HBox.hgrow="ALWAYS" />
+                  <!-- Leyenda Superior -->
+                  <HBox spacing="10.0">
+                     <children>
+                        <Label styleClass="leyenda-item" text="✔ Completado" textFill="#22c55e" />
+                        <Label styleClass="leyenda-item" text="⚪ Pendiente" />
+                     </children>
+                  </HBox>
+               </children>
             </HBox>
-           <HBox alignment="CENTER" spacing="35" styleClass="legend">
-   
-               <HBox alignment="CENTER" spacing="8">
-   
-                   <Label styleClass="legend-correct-icon" text="✓" />
-   
-                   <Label styleClass="legend-label" text="Correcto" />
-   
-               </HBox>
-   
-   
-               <HBox alignment="CENTER" spacing="8">
-   
-                   <Label styleClass="legend-incorrect-icon" text="×" />
-   
-                   <Label styleClass="legend-label" text="Incorrecto" />
-   
-               </HBox>
-   
-   
-               <HBox alignment="CENTER" spacing="8">
-   
-                   <Label styleClass="legend-hint-icon" text="💡" />
-   
-                   <Label styleClass="legend-label" text="Pista usada" />
-   
-               </HBox>
-   
-           </HBox>
+            
+            <!-- Pasos del 1 al 10 -->
+            <HBox alignment="CENTER" spacing="6.0">
+               <children>
+                  <Button styleClass="btn-paso, paso-completado" text="✔" />
+                  <Button styleClass="btn-paso, paso-completado" text="✔" />
+                  <Button styleClass="btn-paso, paso-completado" text="✔" />
+                  <Button styleClass="btn-paso, paso-actual" text="4" />
+                  <Button styleClass="btn-paso, paso-pendiente" text="5" />
+                  <Button styleClass="btn-paso, paso-pendiente" text="6" />
+                  <Button styleClass="btn-paso, paso-pendiente" text="7" />
+                  <Button styleClass="btn-paso, paso-pendiente" text="8" />
+                  <Button styleClass="btn-paso, paso-pendiente" text="9" />
+                  <Button styleClass="btn-paso, paso-pendiente" text="10" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
 
-        </VBox>
-    </center>
+      <!-- 4. ÁREA PRINCIPAL DE EJERCICIO Y RESULTADO -->
+      <HBox spacing="15.0">
+         <children>
+            <!-- Área de la Operación -->
+            <VBox styleClass="card-operacion" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label fx:id="lblPasoInfo" styleClass="texto-paso-verde" text="TU OPERACIÓN ES:" />
+                  <Label fx:id="lblExpresion" styleClass="texto-expresion" />
+               </children>
+            </VBox>
+            
+            <!-- Área de Resultado / Feedback -->
+            <VBox alignment="CENTER" minWidth="120.0" styleClass="card-feedback">
+               <children>
+                  <Label styleClass="icono-check" text="🧮" />
+                  <Label styleClass="texto-esperando" text="Esperando..." />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
 
-</BorderPane>
+      <!-- 5. TECLADO INTERACTIVO: NÚMEROS -->
+      <VBox spacing="5.0">
+         <children>
+            <Label styleClass="titulo-subseccion" text="NÚMEROS" />
+            <HBox alignment="CENTER" spacing="12.0">
+               <children>
+                  <Button fx:id="btnNum1" maxWidth="1.0E38" onAction="#presionarBoton" styleClass="btn-num, num-3" text="3" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnNum2" maxWidth="1.0E38" onAction="#presionarBoton" styleClass="btn-num, num-6" text="6" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnNum3" maxWidth="1.0E38" onAction="#presionarBoton" styleClass="btn-num, num-9" text="9" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnNum4" maxWidth="1.0E38" onAction="#presionarBoton" styleClass="btn-num, num-2" text="2" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Label styleClass="microcopia" text="👆 Toca un número para agregarlo a la operación" />
+         </children>
+      </VBox>
+
+      <!-- TECLADO INTERACTIVO: OPERACIONES Y ACCIONES -->
+      <VBox spacing="5.0">
+         <children>
+            <Label styleClass="titulo-subseccion" text="OPERACIONES" />
+            <HBox alignment="CENTER" spacing="8.0">
+               <children>
+                  <Button onAction="#presionarBoton" styleClass="btn-operador" text="+" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#presionarBoton" styleClass="btn-operador" text="-" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#presionarBoton" styleClass="btn-operador" text="×" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#presionarBoton" styleClass="btn-operador" text="÷" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#presionarBoton" styleClass="btn-operador" text="(" HBox.hgrow="ALWAYS" />
+                  <Button onAction="#presionarBoton" styleClass="btn-operador" text=")" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <Label styleClass="microcopia" text="👆 Toca una operación para usarla" />
+            
+            <!-- Botones de Acción (Borrar, Limpiar, Verificar) -->
+            <HBox alignment="CENTER" spacing="12.0">
+               <children>
+                  <Button fx:id="btnBorrar" maxWidth="1.0E38" onAction="#borrarUltimo" styleClass="btn-accion, btn-borrar" text="⌫ Borrar" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnLimpiar" maxWidth="1.0E38" onAction="#limpiarTodo" styleClass="btn-accion, btn-limpiar" text="✕ Limpiar" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnVerificar" maxWidth="1.0E38" onAction="#calcularResultado" styleClass="btn-accion, btn-verificar" text="✓ Verificar" HBox.hgrow="ALWAYS" />
+               </children>
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+
+      <!-- 6. PIE DE PÁGINA: LEYENDA -->
+      <HBox alignment="CENTER" spacing="15.0" styleClass="footer-leyenda">
+         <children>
+            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="✔ Correcto" /><Label styleClass="subtexto-gris" text="Respuesta correcta" /></children></VBox>
+            <Label text="|" />
+            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="✖ Incorrecto" /><Label styleClass="subtexto-gris" text="Respuesta incorrecta" /></children></VBox>
+            <Label text="|" />
+            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="💡 Pista usada" /><Label styleClass="subtexto-gris" text="Usaste una pista" /></children></VBox>
+            <Label text="|" />
+            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="👆 Seleccionado" /><Label styleClass="subtexto-gris" text="Elemento en uso" /></children></VBox>
+         </children>
+      </HBox>
+      
+   </children>
+</VBox>
