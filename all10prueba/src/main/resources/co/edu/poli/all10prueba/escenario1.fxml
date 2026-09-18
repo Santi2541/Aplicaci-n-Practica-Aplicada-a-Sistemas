@@ -14,7 +14,7 @@
    </padding>
    <children>
       
-      <!-- 2. BLOQUE SUPERIOR: Encabezado -->
+      <!-- BLOQUE SUPERIOR: Encabezado -->
       <HBox alignment="CENTER" spacing="10.0">
          <children>
             <!-- Indicador de Tiempo -->
@@ -50,7 +50,7 @@
          </children>
       </HBox>
 
-      <!-- 3. MÓDULO DE OBJETIVOS / PASOS -->
+      <!-- MÓDULO DE OBJETIVOS / PASOS -->
       <VBox spacing="8.0" styleClass="card-blanca">
          <children>
             <HBox alignment="CENTER_LEFT">
@@ -67,25 +67,25 @@
                </children>
             </HBox>
             
-            <!-- Pasos del 1 al 10 -->
+            <!-- Numeros del 1 al 10 -->
             <HBox alignment="CENTER" spacing="6.0">
                <children>
-                  <Button styleClass="btn-paso, paso-completado" text="✔" />
-                  <Button styleClass="btn-paso, paso-completado" text="✔" />
-                  <Button styleClass="btn-paso, paso-completado" text="✔" />
-                  <Button styleClass="btn-paso, paso-actual" text="4" />
-                  <Button styleClass="btn-paso, paso-pendiente" text="5" />
-                  <Button styleClass="btn-paso, paso-pendiente" text="6" />
-                  <Button styleClass="btn-paso, paso-pendiente" text="7" />
-                  <Button styleClass="btn-paso, paso-pendiente" text="8" />
-                  <Button styleClass="btn-paso, paso-pendiente" text="9" />
-                  <Button styleClass="btn-paso, paso-pendiente" text="10" />
+                  <Button fx:id="btnPaso1" styleClass="btn-paso, paso-actual" text="1" />
+                  <Button fx:id="btnPaso2" styleClass="btn-paso, paso-actual" text="2" />
+                  <Button fx:id="btnPaso3" styleClass="btn-paso, paso-actual" text="3" />
+                  <Button fx:id="btnPaso4" styleClass="btn-paso, paso-actual" text="4" />
+                  <Button fx:id="btnPaso5" styleClass="btn-paso, paso-actual" text="5" />
+                  <Button fx:id="btnPaso6" styleClass="btn-paso, paso-actual" text="6" />
+                  <Button fx:id="btnPaso7" styleClass="btn-paso, paso-actual" text="7" />
+                  <Button fx:id="btnPaso8" styleClass="btn-paso, paso-actual" text="8" />
+                  <Button fx:id="btnPaso9" styleClass="btn-paso, paso-actual" text="9" />
+                  <Button fx:id="btnPaso10" styleClass="btn-paso, paso-actual" text="10" />
                </children>
             </HBox>
          </children>
       </VBox>
 
-      <!-- 4. ÁREA PRINCIPAL DE EJERCICIO Y RESULTADO -->
+      <!-- ÁREA PRINCIPAL DE EJERCICIO Y RESULTADO -->
       <HBox spacing="15.0">
          <children>
             <!-- Área de la Operación -->
@@ -106,7 +106,7 @@
          </children>
       </HBox>
 
-      <!-- 5. TECLADO INTERACTIVO: NÚMEROS -->
+      <!-- TECLADO INTERACTIVO: NÚMEROS -->
       <VBox spacing="5.0">
          <children>
             <Label styleClass="titulo-subseccion" text="NÚMEROS" />
@@ -152,7 +152,7 @@
          </children>
       </VBox>
 
-      <!-- 6. PIE DE PÁGINA: LEYENDA -->
+      <!-- PIE DE PÁGINA: LEYENDA -->
       <HBox alignment="CENTER" spacing="15.0" styleClass="footer-leyenda">
          <children>
             <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="✔ Correcto" /><Label styleClass="subtexto-gris" text="Respuesta correcta" /></children></VBox>
