@@ -1,0 +1,57 @@
+# Documentación de Base de Datos y Conexión - Proyecto ALL TEN
+
+## 1. Definir con el equipo qué se va a almacenar en la base de datos
+
+Para la arquitectura del juego, se decidió almacenar las combinaciones numéricas y sus soluciones precalculadas en lugar de procesarlas en tiempo de ejecución. Esta decisión técnica aporta las siguientes ventajas:
+
+*   **Generación de partidas garantizadas:** Asegura que al jugador solo se le entreguen conjuntos de números que son matemáticamente posibles de resolver para todo el rango del 1 al 10.
+*   **Ahorro de procesamiento (Pre-cálculo):** Evita que Java tenga que calcular árboles de expresiones complejas y algoritmos de fuerza bruta en tiempo real.
+*   **Gestión de dificultad:** Permite clasificar los niveles según la cantidad de caminos o combinaciones posibles para llegar al resultado.
+
+## 2. Definir el modelo de datos (tablas/colecciones necesarias)
+
+Se definió un modelo de datos relacional (MySQL) normalizado hasta la Tercera Forma Normal (3FN), compuesto por cuatro tablas principales:
+
+### `conjuntos_base`
+Almacena los grupos de números iniciales que se entregan al jugador.
+*   `id_conjunto` (INT, Primary Key)
+*   `num_1` a `num_4` (INT): Valores base de la partida.
+*   `dificultad` (VARCHAR): Clasificación según combinaciones posibles.
+
+### `soluciones_objetivo`
+Guarda las secuencias de operaciones precalculadas (1:N con `conjuntos_base`).
+*   `id_solucion` (INT, Primary Key)
+*   `id_conjunto` (INT, Foreign Key)
+*   `numero_objetivo` (INT): Resultado esperado (1 al 10).
+*   `expresion` (VARCHAR): Fórmula exacta (ej. `(num_1 + num_2) * num_3`).
+
+### `usuarios`
+Gestión de identidad de los jugadores.
+*   `id_usuario` (INT, Primary Key)
+*   `alias` (VARCHAR): Nombre en el juego.
+*   `fecha_registro` (DATETIME)
+
+### `partidas_jugadas`
+Entidad transaccional de métricas de juego.
+*   `id_partida` (INT, Primary Key)
+*   `id_usuario` (INT, Foreign Key)
+*   `id_conjunto` (INT, Foreign Key)
+*   `fecha_partida` (DATETIME)
+*   `tiempo_segundos` (INT)
+*   `estado` (VARCHAR): Ej. "Completado", "Abandonado".
+
+## 3. Documentar la configuración de conexión
+
+El proyecto utiliza **Maven** para la gestión de dependencias y **JDBC** para la comunicación nativa con MySQL.
+
+**Dependencia en `pom.xml`:**
+Extraída del repositorio central de Maven (versión estable LTS).
+```xml
+<dependencies>
+    <!-- Driver de conexión para MySQL -->
+    <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <version>8.4.0</version>
+    </dependency>
+</dependencies>
