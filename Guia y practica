@@ -1,0 +1,23 @@
+# Guías Prácticas y Herramientas de Desarrollo
+
+## 1. Configuración del Proyecto en Eclipse con Maven
+
+Para facilitar la gestión de dependencias y evitar la configuración manual de archivos `.jar` locales, el proyecto de ALL TEN se inicializa utilizando Maven.
+
+**Pasos de creación:**
+1. En Eclipse, abrir el menú contextual o ir a **File > New > Maven Project**.
+2. Marcar la casilla **"Create a simple project (skip archetype selection)"** para obtener una estructura limpia.
+3. Asignar un **Group Id** (ej. `com.allten`) y un **Artifact Id** (ej. `motor-base-datos`).
+4. Hacer clic en **Finish**.
+
+## 2. Gestión de Dependencias (Maven Repository)
+
+Las librerías externas (como el driver JDBC) se gestionan de forma centralizada.
+
+**Proceso estandarizado para agregar nuevas librerías:**
+1. Ingresar a [mvnrepository.com](https://mvnrepository.com/).
+2. Buscar la herramienta necesaria (ej. `mysql-connector-j`).
+3. Seleccionar una versión estable y LTS (sin etiquetas Alpha/Beta, ej. `8.4.0`). Las versiones LTS garantizan estabilidad para entornos de producción y evitan *breaking changes* (cambios que rompan el código a futuro).
+4. Copiar el bloque de código XML de la pestaña "Maven".
+5. Pegar el bloque dentro de las etiquetas `<dependencies>` en el archivo `pom.xml` del proyecto.
+6. Guardar (`Ctrl + S`); Eclipse descargará y enlazará la librería automáticamente.
