@@ -39,13 +39,16 @@ public class all10controller implements Initializable {
     private int segundosTranscurridos = 0;
     
     public void initialize(URL location, ResourceBundle resources) {
-        arregloPasos = new Button[]{
-            btnPaso1, btnPaso2, btnPaso3, btnPaso4, btnPaso5, 
-            btnPaso6, btnPaso7, btnPaso8, btnPaso9, btnPaso10
-        };
+        // Inicializa el arreglo y componentes de forma segura
+        inicializarComponentesSeguros();
 
+        // Ponemos la lista de pasos en estado inicial
         establecerListaIncompleta();
-        iniciarCronometro();
+
+        // Inicia el cronómetro solo si estamos en entorno gráfico
+        if (lblTiempo != null) {
+            iniciarCronometro();
+        }
 
         javafx.application.Platform.runLater(() -> {
             if (lblExpresion != null) {
@@ -54,17 +57,51 @@ public class all10controller implements Initializable {
         });
     }
     
+    /**
+     * Protector para JUnit: Inicializa instancias simuladas si las anotaciones 
+     * @FXML son null por ejecutarse fuera de JavaFX.
+     */
+    public void inicializarComponentesSeguros() {
+        if (btnPaso1 == null) btnPaso1 = new Button("1");
+        if (btnPaso2 == null) btnPaso2 = new Button("2");
+        if (btnPaso3 == null) btnPaso3 = new Button("3");
+        if (btnPaso4 == null) btnPaso4 = new Button("4");
+        if (btnPaso5 == null) btnPaso5 = new Button("5");
+        if (btnPaso6 == null) btnPaso6 = new Button("6");
+        if (btnPaso7 == null) btnPaso7 = new Button("7");
+        if (btnPaso8 == null) btnPaso8 = new Button("8");
+        if (btnPaso9 == null) btnPaso9 = new Button("9");
+        if (btnPaso10 == null) btnPaso10 = new Button("10");
+
+        if (btnNum1 == null) btnNum1 = new Button("9");
+        if (btnNum2 == null) btnNum2 = new Button("6");
+        if (btnNum3 == null) btnNum3 = new Button("3");
+        if (btnNum4 == null) btnNum4 = new Button("2");
+
+        if (lblExpresion == null) lblExpresion = new Label("");
+
+        arregloPasos = new Button[]{
+            btnPaso1, btnPaso2, btnPaso3, btnPaso4, btnPaso5, 
+            btnPaso6, btnPaso7, btnPaso8, btnPaso9, btnPaso10
+        };
+    }
+    
     private void establecerListaIncompleta() {
-        for (int i = 0; i < arregloPasos.length; i++) {
-            Button btnPaso = arregloPasos[i];
-            if (btnPaso != null) {
-                btnPaso.getStyleClass().removeAll("paso-completado", "paso-actual", "paso-pendiente");
-                btnPaso.setStyle(null);
+        if (arregloPasos != null) {
+            for (int i = 0; i < arregloPasos.length; i++) {
+                Button btnPaso = arregloPasos[i];
+                if (btnPaso != null) {
+                    // 1. Limpiamos cualquier estilo o clase previa
+                    btnPaso.getStyleClass().removeAll("paso-completado", "paso-actual", "paso-pendiente");
+                    btnPaso.setStyle(null);
 
-                int numeroPaso = i + 1;
-                btnPaso.setText(String.valueOf(numeroPaso));
+                    // 2. Asignamos el número de paso correspondiente (1 al 10)
+                    int numeroPaso = i + 1;
+                    btnPaso.setText(String.valueOf(numeroPaso));
 
-                btnPaso.getStyleClass().add("paso-actual");
+                    // 3. AHORA TODAS LAS CASILLAS USAN 'paso-actual' (Borde Morado)
+                    btnPaso.getStyleClass().add("paso-actual");
+                }
             }
         }
     }
@@ -100,7 +137,7 @@ public class all10controller implements Initializable {
     }
     
     @FXML
-    private void limpiarTodo(ActionEvent event) {
+	public void limpiarTodo(ActionEvent event) {
         lblExpresion.setText("");
 
         btnNum1.setDisable(false);
@@ -110,7 +147,7 @@ public class all10controller implements Initializable {
     }
     
     @FXML
-    private void borrarUltimo(ActionEvent event) {
+	public void borrarUltimo(ActionEvent event) {
         String textoActual = lblExpresion.getText().trim();
         if (!textoActual.isEmpty()) {
             lblExpresion.setText(textoActual.substring(0, textoActual.length() - 1).trim());
@@ -118,7 +155,7 @@ public class all10controller implements Initializable {
     }
 
     @FXML
-    private void calcularResultado(ActionEvent event) {
+	public void calcularResultado(ActionEvent event) {
         boolean usoLosCuatroNumeros = btnNum1.isDisabled() && 
                                      btnNum2.isDisabled() && 
                                      btnNum3.isDisabled() && 
@@ -168,7 +205,7 @@ public class all10controller implements Initializable {
         }
     }
 
-    private void marcarPasoComoCompletado(int numeroPaso) {
+    public void marcarPasoComoCompletado(int numeroPaso) {
         int indice = numeroPaso - 1;
 
         if (arregloPasos == null) {
@@ -193,7 +230,7 @@ public class all10controller implements Initializable {
         }
     }
     
-    private double evaluarCadenaMatematica(final String str) {
+    public double evaluarCadenaMatematica(final String str) {
         return new Object() {
             int pos = -1, ch;
 
