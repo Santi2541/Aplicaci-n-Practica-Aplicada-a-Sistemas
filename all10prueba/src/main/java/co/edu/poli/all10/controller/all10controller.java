@@ -71,7 +71,7 @@ public class all10controller implements Initializable {
     
     /**
      * Protector para JUnit: Inicializa instancias simuladas si las anotaciones 
-     * @FXML son null por ejecutarse fuera de JavaFX.
+     * "FXML" son null por ejecutarse fuera de JavaFX.
      */
     public void inicializarComponentesSeguros() {
         if (btnPaso1 == null) btnPaso1 = new Button("1");

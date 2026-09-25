@@ -7,7 +7,6 @@ import org.junit.platform.suite.api.Suite;
 
 import static io.cucumber.junit.platform.engine.Constants.GLUE_PROPERTY_NAME;
 
-
 /*
  * Clase Runner del cucumber, organiza las operaciones y determina donde buscar los valoress
  */
