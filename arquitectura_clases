@@ -1,0 +1,32 @@
+# Arquitectura de Clases: ALL TEN
+
+Este documento detalla la estructura orientada a objetos diseñada para el motor del juego y la interfaz de usuario. El objetivo es garantizar una separación clara de responsabilidades técnicas antes de iniciar la fase de codificación en Java.
+
+## Entidades Principales del Sistema
+
+El modelo se compone de **6 clases fundamentales**:
+
+*   **`all10controller`**
+    Actúa como el controlador central de la interfaz gráfica en **JavaFX**. Es el punto de entrada para las interacciones del usuario, recibiendo y procesando de forma reactiva cada clic del jugador.
+
+*   **`MotorOperaciones`**
+    El núcleo matemático del juego. Su responsabilidad es construir la expresión matemática paso a paso basándose en las elecciones del jugador y validar su correctitud lógica.
+
+*   **`TableroNumeros`**
+    Representa el estado físico de la partida en curso. Almacena los **4 números base** que el jugador tiene habilitados para usar y gestiona los **10 objetivos** (resultados) que debe resolver.
+
+*   **`EstadoPartida`**
+    Administra el flujo interno del juego. Lleva la cuenta del progreso del jugador y el estado general de cómo avanza la partida actual.
+
+*   **`Objetivo`**
+    Define la meta individual que el jugador debe alcanzar; es decir, el resultado numérico específico que se debe formar operando los números disponibles en el tablero.
+
+*   **`PersistenciaDatos`**
+    Clase dedicada a la conexión directa con MySQL mediante el driver **JDBC**.
+    Su función es guardar y validar en la base de datos **únicamente las combinaciones de números posibles para operar**, estructurando el sistema como un motor de validación lógico.
+
+---
+
+## 🔗 Anexos y Referencias Técnicas
+*   **Diagrama Interactivo UML:** [Ver diseño completo en Lucidchart](https://lucid.app/lucidchart/fcf2cf25-1b70-4b59-a4f4-abe483f23b6b/edit)
+*   **Imagen de Respaldo:** El archivo exportado del diagrama de clases se encuentra almacenado en el directorio de documentación de este repositorio.
