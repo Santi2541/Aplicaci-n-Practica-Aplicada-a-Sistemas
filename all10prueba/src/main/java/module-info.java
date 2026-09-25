@@ -6,4 +6,5 @@ module co.edu.poli.all10prueba {
 
     opens co.edu.poli.all10.controller to javafx.fxml;
     exports co.edu.poli.all10prueba;
+    exports co.edu.poli.all10.controller;
 }

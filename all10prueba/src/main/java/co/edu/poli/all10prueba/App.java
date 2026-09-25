@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * JavaFX App
+ * Ejecuta todo el entorno, conecta operaciones con el entorno gráfico.
  */
 public class App extends Application {
 
