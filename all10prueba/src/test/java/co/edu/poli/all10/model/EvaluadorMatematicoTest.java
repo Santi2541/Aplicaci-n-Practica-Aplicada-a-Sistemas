@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import co.edu.poli.all10.controller.all10controller;
+import co.edu.poli.all10.modelo.Evaluador;
 
 
 /**
@@ -16,7 +16,7 @@ import co.edu.poli.all10.controller.all10controller;
  */
 class EvaluadorMatematicoTest {
 
-    private all10controller controller;
+    private Evaluador evaluador;
 
     /**
      * Prepara el entorno antes de cada prueba inicializando una nueva instancia 
@@ -24,7 +24,7 @@ class EvaluadorMatematicoTest {
      */
     @BeforeEach
     void setUp() {
-        controller = new all10controller();
+        evaluador = new Evaluador();
     }
 
     /**
@@ -35,7 +35,7 @@ class EvaluadorMatematicoTest {
     @Test
     void testValidacionPrecedenciaOperadores() {
         
-        double resultado = controller.evaluarCadenaMatematica("9 + 3 * 2");
+        double resultado = evaluador.evaluar("9 + 3 * 2");
         assertEquals(15.0, resultado, "Debe resolver primero 3*2=6 y luego 9+6=15");
     }
     
@@ -45,7 +45,7 @@ class EvaluadorMatematicoTest {
      */
     @Test
     void testValidacionUsoDeParentesis() {
-        double resultado = controller.evaluarCadenaMatematica("( 9 + 3 ) * 2");
+        double resultado = evaluador.evaluar("( 9 + 3 ) * 2");
         assertEquals(24.0, resultado, "Debe resolver primero el paréntesis (9+3)=12 y luego 12*2=24");
     }
     
@@ -56,7 +56,7 @@ class EvaluadorMatematicoTest {
     @Test
     void testValidacionSumaYRestaCombinada() {
         
-        double resultado = controller.evaluarCadenaMatematica("9 + 6 - 3 - 2");
+        double resultado = evaluador.evaluar("9 + 6 - 3 - 2");
         assertEquals(10.0, resultado, "La operación 9+6-3-2 debe evaluar exactamente a 10.0");
     }
     
@@ -68,7 +68,7 @@ class EvaluadorMatematicoTest {
     @Test
     void testEvaluarCadenaMatematicaDivisionPorCero() {
         assertThrows(ArithmeticException.class, () -> {
-            controller.evaluarCadenaMatematica("6 / ( 3 - 3 )");
+        	evaluador.evaluar("6 / ( 3 - 3 )");
         }, "Debe lanzar ArithmeticException al intentar dividir por cero");
     }
     
@@ -80,7 +80,7 @@ class EvaluadorMatematicoTest {
     @Test
     void testEvaluarCadenaMatematicaOperacionCombinada() {
         String expresion = "( 9 - 6 ) + 3 + 2";
-        double resultado = controller.evaluarCadenaMatematica(expresion.replace("×", "*").replace("÷", "/"));
+        double resultado = evaluador.evaluar(expresion.replace("×", "*").replace("÷", "/"));
         assertEquals(8.0, resultado, "La operación (9-6)+3+2 debe evaluar exactamente a 8.0");
     }
 

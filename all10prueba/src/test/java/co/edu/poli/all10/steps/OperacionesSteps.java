@@ -3,6 +3,7 @@ package co.edu.poli.all10.steps;
 import static org.junit.jupiter.api.Assertions.*;
 
 import co.edu.poli.all10.controller.all10controller;
+import co.edu.poli.all10.modelo.Evaluador;
 import io.cucumber.java.es.Dado;
 import io.cucumber.java.es.Cuando;
 import io.cucumber.java.es.Entonces;
@@ -15,7 +16,7 @@ import javafx.application.Platform;
  */
 public class OperacionesSteps {
 
-    private all10controller controller;
+    private Evaluador evaluador;
     private double resultadoObtenido;
     private Exception excepcionCapturada;
 
@@ -26,9 +27,7 @@ public class OperacionesSteps {
     @Dado("que el controlador de All10 está inicializado")
     public void inicializarControlador() {
     	iniciarToolkitJavaFX();
-        controller = new all10controller();
-        
-        controller.inicializarComponentesSeguros();
+        evaluador = new Evaluador();
     }
     
     private static void iniciarToolkitJavaFX() {
@@ -48,7 +47,7 @@ public class OperacionesSteps {
     public void evaluarExpresion(String expresion) {
         try {
             String expresionLimpia = expresion.replace("×", "*").replace("÷", "/");
-            resultadoObtenido = controller.evaluarCadenaMatematica(expresionLimpia);
+            resultadoObtenido = evaluador.evaluar(expresionLimpia);
         } catch (Exception e) {
             this.excepcionCapturada = e;
         }
@@ -76,7 +75,7 @@ public class OperacionesSteps {
     public void intentarEvaluarDivisionPorCero(String expresion) {
         try {
             String expresionLimpia = expresion.replace("×", "*").replace("÷", "/");
-            controller.evaluarCadenaMatematica(expresionLimpia);
+            evaluador.evaluar(expresionLimpia);
         } catch (Exception e) {
             this.excepcionCapturada = e;
         }
