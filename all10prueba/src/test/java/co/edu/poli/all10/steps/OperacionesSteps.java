@@ -2,10 +2,11 @@ package co.edu.poli.all10.steps;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import co.edu.poli.all10.controller.all10controller;
 import io.cucumber.java.es.Dado;
 import io.cucumber.java.es.Cuando;
 import io.cucumber.java.es.Entonces;
-import co.edu.poli.all10.controller.all10controller;
+import javafx.application.Platform;
 
 
 /*
@@ -24,9 +25,17 @@ public class OperacionesSteps {
      */
     @Dado("que el controlador de All10 está inicializado")
     public void inicializarControlador() {
+    	iniciarToolkitJavaFX();
         controller = new all10controller();
         
         controller.inicializarComponentesSeguros();
+    }
+    
+    private static void iniciarToolkitJavaFX() {
+        try {
+            Platform.startup(() -> { });
+        } catch (IllegalStateException e) {
+        }
     }
 
     /**
