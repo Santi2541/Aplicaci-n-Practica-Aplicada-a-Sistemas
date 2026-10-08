@@ -1,52 +1,54 @@
-# Documentación de Base de Datos y Conexión - Proyecto ALL TEN
+Para la arquitectura del juego se decidió almacenar únicamente la información de los jugadores y de su desempeño: usuarios, puntajes y ranking. Las combinaciones numéricas y sus soluciones ya no se almacenan en la base de datos. Esta decisión aporta las siguientes ventajas:
 
-## 1. Definir con el equipo qué se va a almacenar en la base de datos
+Simplicidad del modelo: Se reduce el esquema a las entidades estrictamente necesarias para el alcance del proyecto, lo que facilita su implementación y mantenimiento.
+Persistencia del progreso: Cada partida queda registrada, permitiendo conservar el historial y el puntaje de cada jugador entre sesiones.
+Ranking competitivo: Permite comparar el desempeño de los jugadores y mostrar una tabla de clasificación global.
+Menor carga en la base de datos: Al no almacenar conjuntos ni soluciones, las consultas se limitan a registrar resultados y consultar posiciones.
+2. Definir el modelo de datos (tablas/colecciones necesarias)
 
-Para la arquitectura del juego, se decidió almacenar las combinaciones numéricas y sus soluciones precalculadas en lugar de procesarlas en tiempo de ejecución. Esta decisión técnica aporta las siguientes ventajas:
+Se definió un modelo de datos relacional (MySQL) normalizado hasta la Tercera Forma Normal (3FN), compuesto por tres tablas principales:
 
-*   **Generación de partidas garantizadas:** Asegura que al jugador solo se le entreguen conjuntos de números que son matemáticamente posibles de resolver para todo el rango del 1 al 10.
-*   **Ahorro de procesamiento (Pre-cálculo):** Evita que Java tenga que calcular árboles de expresiones complejas y algoritmos de fuerza bruta en tiempo real.
-*   **Gestión de dificultad:** Permite clasificar los niveles según la cantidad de caminos o combinaciones posibles para llegar al resultado.
+usuarios
 
-## 2. Definir el modelo de datos (tablas/colecciones necesarias)
-
-Se definió un modelo de datos relacional (MySQL) normalizado hasta la Tercera Forma Normal (3FN), compuesto por cuatro tablas principales:
-
-### `conjuntos_base`
-Almacena los grupos de números iniciales que se entregan al jugador.
-*   `id_conjunto` (INT, Primary Key)
-*   `num_1` a `num_4` (INT): Valores base de la partida.
-*   `dificultad` (VARCHAR): Clasificación según combinaciones posibles.
-
-### `soluciones_objetivo`
-Guarda las secuencias de operaciones precalculadas (1:N con `conjuntos_base`).
-*   `id_solucion` (INT, Primary Key)
-*   `id_conjunto` (INT, Foreign Key)
-*   `numero_objetivo` (INT): Resultado esperado (1 al 10).
-*   `expresion` (VARCHAR): Fórmula exacta (ej. `(num_1 + num_2) * num_3`).
-
-### `usuarios`
 Gestión de identidad de los jugadores.
-*   `id_usuario` (INT, Primary Key)
-*   `alias` (VARCHAR): Nombre en el juego.
-*   `fecha_registro` (DATETIME)
 
-### `partidas_jugadas`
-Entidad transaccional de métricas de juego.
-*   `id_partida` (INT, Primary Key)
-*   `id_usuario` (INT, Foreign Key)
-*   `id_conjunto` (INT, Foreign Key)
-*   `fecha_partida` (DATETIME)
-*   `tiempo_segundos` (INT)
-*   `estado` (VARCHAR): Ej. "Completado", "Abandonado".
+id_usuario (INT, Primary Key, AUTO_INCREMENT)
+alias (VARCHAR(50), UNIQUE, NOT NULL): Nombre en el juego.
+fecha_registro (DATETIME, NOT NULL): Fecha de creación del usuario.
+partidas_jugadas
 
-## 3. Documentar la configuración de conexión
+Entidad transaccional que registra cada partida y su puntaje.
 
-El proyecto utiliza **Maven** para la gestión de dependencias y **JDBC** para la comunicación nativa con MySQL.
+id_partida (INT, Primary Key, AUTO_INCREMENT)
+id_usuario (INT, Foreign Key → usuarios.id_usuario)
+fecha_partida (DATETIME, NOT NULL)
+puntaje (INT, NOT NULL): Puntaje obtenido en la partida.
+tiempo_segundos (INT): Duración de la partida.
+estado (VARCHAR(20)): Ej. “Completado”, “Abandonado”.
+ranking
 
-**Dependencia en `pom.xml`:**
+Clasificación acumulada de los jugadores (1:1 con usuarios).
+
+id_ranking (INT, Primary Key, AUTO_INCREMENT)
+id_usuario (INT, Foreign Key → usuarios.id_usuario, UNIQUE)
+puntaje_total (INT, NOT NULL): Suma acumulada de puntajes.
+mejor_puntaje (INT): Puntaje más alto en una sola partida.
+partidas_completadas (INT): Cantidad de partidas finalizadas.
+posicion (INT): Posición actual en la tabla de clasificación.
+fecha_actualizacion (DATETIME): Última actualización del registro.
+
+Relaciones:
+
+usuarios 1:N partidas_jugadas
+usuarios 1:1 ranking
+3. Documentar la configuración de conexión
+
+El proyecto utiliza Maven para la gestión de dependencias y JDBC para la comunicación nativa con MySQL.
+
+Dependencia en pom.xml:
 Extraída del repositorio central de Maven (versión estable LTS).
-```xml
+
+xml
 <dependencies>
     <!-- Driver de conexión para MySQL -->
     <dependency>
