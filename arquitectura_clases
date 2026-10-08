@@ -2,6 +2,10 @@
 
 Este documento detalla la estructura orientada a objetos diseñada para el motor del juego y la interfaz de usuario. El objetivo es garantizar una separación clara de responsabilidades técnicas antes de iniciar la fase de codificación en Java.
 
+## Principio de diseño
+
+La **lógica de validación matemática vive al 100% en las clases de Java** (lógica de negocio). La base de datos no participa en la validación: no almacena combinaciones ni soluciones, y se limita a guardar los resultados de las partidas (alias, puntaje y dificultad) y a consultar el Top 10.
+
 ## Entidades Principales del Sistema
 
 El modelo se compone de **6 clases fundamentales**:
@@ -10,20 +14,30 @@ El modelo se compone de **6 clases fundamentales**:
     Actúa como el controlador central de la interfaz gráfica en **JavaFX**. Es el punto de entrada para las interacciones del usuario, recibiendo y procesando de forma reactiva cada clic del jugador.
 
 *   **`MotorOperaciones`**
-    El núcleo matemático del juego. Su responsabilidad es construir la expresión matemática paso a paso basándose en las elecciones del jugador y validar su correctitud lógica.
+    El núcleo matemático del juego. Construye la expresión matemática paso a paso basándose en las elecciones del jugador y valida su correctitud lógica. Toda la validación se calcula en Java, sin consultar la base de datos.
 
 *   **`TableroNumeros`**
     Representa el estado físico de la partida en curso. Almacena los **4 números base** que el jugador tiene habilitados para usar y gestiona los **10 objetivos** (resultados) que debe resolver.
 
 *   **`EstadoPartida`**
-    Administra el flujo interno del juego. Lleva la cuenta del progreso del jugador y el estado general de cómo avanza la partida actual.
+    Administra el flujo interno del juego. Lleva la cuenta del progreso del jugador, el nivel de dificultad elegido y el estado general de cómo avanza la partida actual.
 
 *   **`Objetivo`**
     Define la meta individual que el jugador debe alcanzar; es decir, el resultado numérico específico que se debe formar operando los números disponibles en el tablero.
 
 *   **`PersistenciaDatos`**
-    Clase dedicada a la conexión directa con MySQL mediante el driver **JDBC**.
-    Su función es guardar y validar en la base de datos **únicamente las combinaciones de números posibles para operar**, estructurando el sistema como un motor de validación lógico.
+    Clase de acceso a datos (**DAO**, Data Access Object) que se conecta directamente con MySQL mediante **JDBC**. Su responsabilidad se limita a **dos funciones**, sin ninguna lógica de juego:
+    1.  **`guardarPartida(alias, puntaje, dificultad)`**: ejecuta un `INSERT` en la base de datos al finalizar la partida, enviando el nombre del jugador, el puntaje y la dificultad.
+    2.  **`obtenerTop10(dificultad)`**: ejecuta un `SELECT` que trae el Top 10 de jugadores filtrando por nivel de dificultad.
+
+    Usa `PreparedStatement` y bloques `try-with-resources` para todas sus consultas.
+
+## Flujo general
+
+1.  El jugador interactúa con la interfaz y `all10controller` recibe cada acción.
+2.  `MotorOperaciones` construye y valida las operaciones usando el estado de `TableroNumeros`, `Objetivo` y `EstadoPartida`.
+3.  Al finalizar la partida, el controlador llama a `PersistenciaDatos.guardarPartida(...)`.
+4.  Para mostrar la clasificación, el controlador llama a `PersistenciaDatos.obtenerTop10(...)`.
 
 ---
 
