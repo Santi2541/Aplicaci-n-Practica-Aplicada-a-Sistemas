@@ -66,8 +66,8 @@ public class JuegoAllTen {
 
             double r = evaluador.evaluar(e);
 
-            if (r == (long) r) {
-                int entero = (int) r;
+            if (Math.abs(r - Math.round(r)) < 1e-9) {
+                int entero = (int) Math.round(r);
                 expresion = String.valueOf(entero);
                 if (entero >= 1 && entero <= 10) {
                     pasosCompletados[entero - 1] = true;

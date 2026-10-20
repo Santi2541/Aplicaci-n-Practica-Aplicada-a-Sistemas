@@ -1,9 +1,11 @@
 package co.edu.poli.all10.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import co.edu.poli.all10.modelo.JuegoAllTen;
+import co.edu.poli.all10.modelo.Numeros;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,9 +59,11 @@ public class all10controller implements Initializable {
      */
 	@Override
     public void initialize(URL location, ResourceBundle resources) {
- 
+		
         inicializarComponentesSeguros();
  
+        mostrarNumerosDelDia();
+        
         establecerListaIncompleta();
         
         if (lblTiempo != null) {
@@ -241,5 +245,20 @@ public class all10controller implements Initializable {
 	/** Devuelve los 4 botones numéricos en orden (índices 0 a 3 del modelo). */
     private Button[] botonesNumericos() {
         return new Button[]{ btnNum1, btnNum2, btnNum3, btnNum4 };
+    }
+    
+    /**
+     * Asigna a los 4 botones numéricos los números generados para el día actual.
+     * Los valores definidos en el FXML solo son un valor por defecto.
+     */
+    private void mostrarNumerosDelDia() {
+        List<Integer> numeros = Numeros.deHoy();
+        System.out.println("Números de hoy: " + numeros);
+        
+        Button[] botones = botonesNumericos();
+
+        for (int i = 0; i < botones.length; i++) {
+            botones[i].setText(String.valueOf(numeros.get(i)));
+        }
     }
 }

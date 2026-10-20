@@ -68,10 +68,10 @@
     -fx-border-width: 1.5px;
     -fx-cursor: hand;
 }
-.num-3 { -fx-background-color: #FFFDE7; -fx-border-color: #FFF59D; -fx-text-fill: #F57F17; }
-.num-6 { -fx-background-color: #E8F5E9; -fx-border-color: #C8E6C9; -fx-text-fill: #2E7D32; }
-.num-9 { -fx-background-color: #E3F2FD; -fx-border-color: #BBDEFB; -fx-text-fill: #1565C0; }
-.num-2 { -fx-background-color: #FCE4EC; -fx-border-color: #F8BBD0; -fx-text-fill: #C2185B; }
+.num-1 { -fx-background-color: #FFFDE7; -fx-border-color: #FFF59D; -fx-text-fill: #F57F17; }
+.num-2 { -fx-background-color: #E8F5E9; -fx-border-color: #C8E6C9; -fx-text-fill: #2E7D32; }
+.num-3 { -fx-background-color: #E3F2FD; -fx-border-color: #BBDEFB; -fx-text-fill: #1565C0; }
+.num-4 { -fx-background-color: #FCE4EC; -fx-border-color: #F8BBD0; -fx-text-fill: #C2185B; }
 
 .btn-operador {
     -fx-background-color: #F3E5F5;
