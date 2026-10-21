@@ -1,5 +1,5 @@
 package co.edu.poli.all10.modelo;
-
+//Manipula la expresion matematica//
 public class Evaluador {
 	
 	public double evaluar(String expresion) {
