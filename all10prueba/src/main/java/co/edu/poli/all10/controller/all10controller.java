@@ -106,7 +106,7 @@ public class all10controller implements Initializable {
         };
     }
     
-    /*
+    /**
      * Inicia la lista vacia para que el usuario logre iniciar una nueva sesión de juego
      */
     private void establecerListaIncompleta() {
@@ -127,7 +127,7 @@ public class all10controller implements Initializable {
         }
     }
     
-    /*
+    /**
      * Inicia el cronómetro solo si estamos en entorno gráfico.
      */
     private void iniciarCronometro() {
