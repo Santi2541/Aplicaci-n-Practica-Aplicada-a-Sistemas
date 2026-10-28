@@ -3,10 +3,12 @@ module co.edu.poli.all10prueba {
     requires javafx.fxml;
 	requires javafx.base;
 	requires javafx.graphics;
+	requires java.sql;
 
     opens co.edu.poli.all10.controller to javafx.fxml;
     opens co.edu.poli.all10.modelo to javafx.base;
     exports co.edu.poli.all10.vista;
     exports co.edu.poli.all10.modelo;
+    exports co.edu.poli.all10.DAO;
     
 }
