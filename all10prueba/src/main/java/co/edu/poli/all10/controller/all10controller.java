@@ -45,8 +45,7 @@ public class all10controller implements Initializable {
     @FXML private Button btnPaso10;
  
     private Button[] arregloPasos;
-    private Timeline cronometro;
-    private int segundosTranscurridos = 0;
+    private Timeline actualizadorTiempo;
 	
 	
 	private final JuegoAllTen juego = new JuegoAllTen();
@@ -65,6 +64,8 @@ public class all10controller implements Initializable {
         mostrarNumerosDelDia();
         
         establecerListaIncompleta();
+        
+        juego.iniciarPartida();
         
         if (lblTiempo != null) {
             iniciarCronometro();
@@ -131,20 +132,29 @@ public class all10controller implements Initializable {
      * Inicia el cronómetro solo si estamos en entorno gráfico.
      */
     private void iniciarCronometro() {
-        segundosTranscurridos = 0;
- 
-        cronometro = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            segundosTranscurridos++;
-            int minutos = segundosTranscurridos / 60;
-            int segundos = segundosTranscurridos % 60;
- 
-            if (lblTiempo != null) {
-                lblTiempo.setText(String.format("⏰ %02d:%02d", minutos, segundos));
-            }
-        }));
- 
-        cronometro.setCycleCount(Timeline.INDEFINITE);
-        cronometro.play();
+        actualizarLabelTiempo();
+
+        actualizadorTiempo = new Timeline(
+            new KeyFrame(Duration.seconds(1), event -> actualizarLabelTiempo()));
+        actualizadorTiempo.setCycleCount(Timeline.INDEFINITE);
+        actualizadorTiempo.play();
+    }
+    
+    /**
+     * Muestra en {@code lblTiempo} los segundos que informa el modelo, con formato mm:ss.
+     */
+    private void actualizarLabelTiempo() {
+        int total = juego.getSegundos();
+        if (lblTiempo != null) {
+            lblTiempo.setText(String.format("⏰ %02d:%02d", total / 60, total % 60));
+        }
+    }
+    
+    /**
+     * Detiene el refresco del reloj en pantalla, si estaba corriendo.
+     */
+    private void detenerActualizadorTiempo() {
+        if (actualizadorTiempo != null) actualizadorTiempo.stop();
     }
  
     /**
@@ -192,6 +202,18 @@ public class all10controller implements Initializable {
 	public void borrarUltimo(ActionEvent event) {
 	    juego.borrarUltimo();
 	    lblExpresion.setText(juego.getExpresion());
+	    actualizarBotonesNumericos();
+	}
+	
+	/**
+	 * Sincroniza los 4 botones numéricos con el modelo: deshabilita los usados
+	 * y habilita los disponibles.
+	 */
+	private void actualizarBotonesNumericos() {
+	    Button[] nums = botonesNumericos();
+	    for (int i = 0; i < nums.length; i++) {
+	        nums[i].setDisable(juego.estaUsado(i));
+	    }
 	}
 	
 	/**
@@ -207,7 +229,11 @@ public class all10controller implements Initializable {
 	    int paso = juego.calcular();
 	    lblExpresion.setText(juego.getExpresion());
 	    if (paso > 0) {
-	        marcarPasoComoCompletado(paso);   // esto sí es vista, se queda aquí
+	        marcarPasoComoCompletado(paso);
+	        if (juego.isPartidaTerminada()) {
+	            detenerActualizadorTiempo();
+	            actualizarLabelTiempo();
+	        }
 	    }
 	}
 	
@@ -260,5 +286,16 @@ public class all10controller implements Initializable {
         for (int i = 0; i < botones.length; i++) {
             botones[i].setText(String.valueOf(numeros.get(i)));
         }
+    }
+    
+    @FXML
+    public void abandonarTablero() {
+        detenerActualizadorTiempo();
+        juego.abandonarPartida();
+        juego.limpiar();
+        lblExpresion.setText("");
+        actualizarBotonesNumericos();
+        actualizarLabelTiempo();     // vuelve a 00:00
+        System.out.println("Partida abandonada: no se registra tiempo.");
     }
 }

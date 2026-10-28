@@ -9,4 +9,4 @@ Característica: Evaluación de operaciones matemáticas en All10
   Escenario: Manejo de división por cero
     Dado que el controlador de All10 está inicializado
     Cuando el jugador intenta evaluar la expresión "6 / ( 3 - 3 )"
-    Entonces el sistema debe detectar una división por cero
+    Entonces el sistema debe detectar una división por cero.

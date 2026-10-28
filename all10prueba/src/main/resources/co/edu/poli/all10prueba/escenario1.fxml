@@ -163,6 +163,7 @@
                   <Button fx:id="btnBorrar" maxWidth="1.0E38" onAction="#borrarUltimo" styleClass="btn-accion, btn-borrar" text="⌫ Borrar" HBox.hgrow="ALWAYS" />
                   <Button fx:id="btnLimpiar" maxWidth="1.0E38" onAction="#limpiarTodo" styleClass="btn-accion, btn-limpiar" text="✕ Limpiar" HBox.hgrow="ALWAYS" />
                   <Button fx:id="btnVerificar" maxWidth="1.0E38" onAction="#calcularResultado" styleClass="btn-accion, btn-verificar" text="✓ Verificar" HBox.hgrow="ALWAYS" />
+                  <Button maxWidth="1.0E38" onAction="#abandonarTablero" styleClass="btn-accion, btn-limpiar" text="🚪 Abandonar" HBox.hgrow="ALWAYS" />
                </children>
                <VBox.margin>
                   <Insets top="8.0" />
