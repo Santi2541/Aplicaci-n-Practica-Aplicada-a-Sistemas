@@ -2,7 +2,7 @@ package co.edu.poli.all10.steps;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import co.edu.poli.all10.controller.all10controller;
+import co.edu.poli.all10.controller.Controlador;
 import co.edu.poli.all10.modelo.Evaluador;
 import io.cucumber.java.es.Dado;
 import io.cucumber.java.es.Cuando;

@@ -1,4 +1,4 @@
-package co.edu.poli.all10.dao;
+package co.edu.poli.all10.DAO;
 
 public class ConexionDB {
 

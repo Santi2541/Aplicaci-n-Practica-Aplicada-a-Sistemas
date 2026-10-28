@@ -1,5 +1,5 @@
 
-package co.edu.poli.all10prueba;
+package co.edu.poli.all10.vista;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import co.edu.poli.all10.controller.all10controller;
+import co.edu.poli.all10.controller.Controlador;
 import co.edu.poli.all10.modelo.Evaluador;
 
 

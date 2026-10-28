@@ -23,7 +23,7 @@ import javafx.util.Duration;
  * Se encarga de procesar la entrada de botones, restringir el uso de números repetidos,
  * evaluar la expresión matemática ingresada y actualizar el progreso de los objetivos.
  */
-public class all10controller implements Initializable {
+public class Controlador implements Initializable {
 	
 	@FXML private Label lblExpresion;
     @FXML private Label lblTiempo;
