@@ -9,9 +9,9 @@ import java.util.Set;
 /**
  * Tabla de posiciones de AllTen.
  * <p>
- * Contiene a los {@link Jugador} (composición): los crea y los conserva en un
+ * Contiene a los {@link Jugador} (composición): los conserva en un
  * {@link HashSet}, que evita jugadores repetidos. El orden se calcula al
- * consultar: más objetivos primero y, a igualdad, menor tiempo.
+ * consultar: más puntaje primero y, a igualdad, menor tiempo.
  */
 public class Ranking {
 
@@ -35,9 +35,9 @@ public class Ranking {
         }
         return null;
     }
-    
+
     /**
-     * Agrega un jugador ya existente en la base de datos.
+     * Agrega un jugador ya existente (por ejemplo, cargado de la BD).
      *
      * @param jugador Jugador a agregar.
      * @return {@code true} si se agregó; {@code false} si ya había uno con ese nombre.
@@ -66,14 +66,14 @@ public class Ranking {
     }
 
     /**
-     * Devuelve los jugadores ordenados por posición: más objetivos primero y,
+     * Devuelve los jugadores ordenados por posición: más puntaje primero y,
      * a igualdad, menor tiempo.
      *
      * @return Lista nueva y ordenada; modificarla no altera el ranking.
      */
     public List<Jugador> obtenerOrdenado() {
         List<Jugador> lista = new ArrayList<>(jugadores);
-        lista.sort(Comparator.comparingInt(Jugador::getObjetivosCompletados).reversed()
+        lista.sort(Comparator.comparingInt(Jugador::getPuntaje).reversed()
                 .thenComparingInt(Jugador::getMejorTiempo));
         return lista;
     }
