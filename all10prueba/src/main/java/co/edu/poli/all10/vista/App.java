@@ -15,7 +15,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("escenario1"));
+        scene = new Scene(loadFXML("registro"));
         stage.setScene(scene);
         stage.show();
     }
@@ -26,7 +26,7 @@ public class App extends Application {
      * @param fxml Nombre del archivo FXML, sin extensión.
      * @throws IOException si no se puede cargar el archivo.
      */
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 

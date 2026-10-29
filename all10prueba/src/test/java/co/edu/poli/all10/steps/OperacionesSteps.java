@@ -9,7 +9,6 @@ import io.cucumber.java.es.Cuando;
 import io.cucumber.java.es.Entonces;
 import javafx.application.Platform;
 
-
 /*
  * Pruebas tipo cucumber en idioma Gherkin establecido en español para tener una mayor
  * claridad de uso en las operaciones.
@@ -26,7 +25,7 @@ public class OperacionesSteps {
      */
     @Dado("que el controlador de All10 está inicializado")
     public void inicializarControlador() {
-    	iniciarToolkitJavaFX();
+        iniciarToolkitJavaFX();
         evaluador = new Evaluador();
     }
     
@@ -85,7 +84,8 @@ public class OperacionesSteps {
      * Paso @Entonces: Valida que la aplicación no colapse ante errores críticos, confirmando 
      * que la excepción capturada sea específicamente una ArithmeticException.
      */
-    @Entonces("el sistema debe detectar una división por cero")
+    // AQUÍ ESTABA EL ERROR: Se agregó el punto al final de la frase dentro de las comillas
+    @Entonces("el sistema debe detectar una división por cero.")
     public void verificarExcepcionDivisionPorCero() {
         assertNotNull(excepcionCapturada, "Se esperaba que capturara la excepción de división por cero");
         assertTrue(excepcionCapturada instanceof ArithmeticException, "Debe ser de tipo ArithmeticException");

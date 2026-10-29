@@ -18,6 +18,10 @@ public class Jugador {
     private int puntaje;
     private int objetivosCompletados;
     private int mejorTiempo; // en segundos
+    
+    // Nuevas variables para la autenticación
+    private String hash;
+    private String sal;
 
     /**
      * Crea un jugador nuevo sin resultados.
@@ -30,6 +34,19 @@ public class Jugador {
             throw new IllegalArgumentException("El nombre no puede estar vacío");
         }
         this.nombre = nombre.trim();
+    }
+
+    /**
+     * Crea un jugador nuevo para el registro, guardando sus credenciales de seguridad.
+     *
+     * @param nombre Nombre del jugador.
+     * @param hash   Contraseña encriptada.
+     * @param sal    Sal criptográfica utilizada para el hash.
+     */
+    public Jugador(String nombre, String hash, String sal) {
+        this(nombre); // Llama al primer constructor para validar que el nombre no esté vacío
+        this.hash = hash;
+        this.sal = sal;
     }
 
     /**
@@ -58,6 +75,12 @@ public class Jugador {
 
     /** @return Mejor tiempo del jugador, en segundos. */
     public int getMejorTiempo() { return mejorTiempo; }
+
+    /** @return El hash de la contraseña del jugador. */
+    public String getHash() { return hash; }
+
+    /** @return La sal criptográfica del jugador. */
+    public String getSal() { return sal; }
 
     /**
      * Registra el resultado de una partida y conserva el mejor: más puntaje y,

@@ -39,6 +39,54 @@ public class JugadorDAO {
             ps.executeUpdate();
         }
     }
+    /**
+     * Verifica si un nombre de usuario ya está registrado en la base de datos.
+     *
+     * @param nombre Nombre de usuario a buscar.
+     * @return true si el usuario ya existe, false en caso contrario.
+     * @throws SQLException si ocurre un error en la base de datos.
+     */
+    public boolean existeNombre(String nombre) throws SQLException {
+        String sql = "SELECT 1 FROM jugador WHERE nombre = ?";
+        try (Connection c = conexion.obtenerConexion();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, nombre);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // Si hay un resultado, el nombre ya existe
+            }
+        }
+    }
+
+    /**
+     * Inserta un nuevo jugador en la base de datos con sus credenciales (hash y sal).
+     *
+     * @param jugador El nuevo jugador a registrar.
+     * @return true si se insertó con éxito, false si no se pudo insertar.
+     * @throws SQLException si ocurre un error en la base de datos.
+     */
+    public boolean insertar(Jugador jugador) throws SQLException {
+        // Asegúrate de que los nombres de las columnas 'hash' y 'sal' coincidan con tu base de datos
+        String sql = "INSERT INTO jugador (nombre, hash, sal, puntaje, objetivos_completados, mejor_tiempo) "
+                   + "VALUES (?, ?, ?, 0, 0, 0)";
+        
+        try (Connection c = conexion.obtenerConexion();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+             
+            ps.setString(1, jugador.getNombre());
+            ps.setString(2, jugador.getHash()); // Tu clase Jugador debe tener este getter
+            ps.setString(3, jugador.getSal());  // Tu clase Jugador debe tener este getter
+            
+            int filasInsertadas = ps.executeUpdate();
+            return filasInsertadas > 0;
+            
+        } catch (SQLException e) {
+            // Si ocurre un error de duplicado (Violación de restricción Unique/Primary Key)
+            if (e.getSQLState() != null && e.getSQLState().startsWith("23")) {
+                return false;
+            }
+            throw e; // Lanza cualquier otro tipo de error SQL
+        }
+    }
 
     /**
      * Lista el Top 10 leyendo la vista ranking.
