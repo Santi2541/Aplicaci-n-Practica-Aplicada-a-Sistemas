@@ -1,0 +1,56 @@
+CREATE DATABASE IF NOT EXISTS all10 CHARACTER SET utf8mb4;
+USE all10;
+
+-- 1. Eliminar objetos en orden inverso (por las dependencias de las FK y vistas)
+DROP VIEW IF EXISTS ranking;
+DROP TABLE IF EXISTS partida;
+DROP TABLE IF EXISTS jugador;
+
+-- 2. Crear tabla jugador con todos sus campos (incluyendo credenciales de seguridad)
+CREATE TABLE jugador (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    hash VARCHAR(64) NULL, -- Corregido: se llama 'hash' para coincidir con el DAO en Java
+    sal VARCHAR(32) NULL,
+    puntaje INT NOT NULL DEFAULT 0,
+    objetivos_completados TINYINT NOT NULL DEFAULT 0,
+    mejor_tiempo INT NOT NULL DEFAULT 0,
+    CHECK (objetivos_completados BETWEEN 0 AND 10)
+);
+
+-- 3. Crear tabla partida
+CREATE TABLE partida (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    jugador_id INT NOT NULL,
+    puntaje INT NOT NULL,
+    objetivos_completados TINYINT NOT NULL,
+    tiempo INT NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_partida_jugador FOREIGN KEY (jugador_id)
+        REFERENCES jugador (id) ON DELETE CASCADE,
+    CHECK (objetivos_completados BETWEEN 0 AND 10)
+);
+
+-- 4. Crear la vista del ranking
+CREATE VIEW ranking AS
+SELECT RANK() OVER (ORDER BY puntaje DESC, mejor_tiempo ASC) AS posicion,
+       nombre, puntaje, objetivos_completados, mejor_tiempo
+FROM jugador;
+
+-- 5. Insertar datos de prueba (Los jugadores antiguos tendrán hash y sal en NULL, lo cual es válido)
+INSERT INTO jugador (nombre, puntaje, objetivos_completados, mejor_tiempo) VALUES
+('Ana', 80, 8, 150),
+('Luis', 80, 8, 200),
+('Eva', 100, 10, 300);
+
+INSERT INTO partida (jugador_id, puntaje, objetivos_completados, tiempo) VALUES
+(1, 60, 6, 180),
+(1, 80, 8, 150),
+(2, 80, 8, 200),
+(3, 100, 10, 300);
+
+-- 6. Consultas de comprobación
+SELECT * FROM ranking ORDER BY posicion LIMIT 10;
+SELECT * FROM ranking ORDER BY posicion;
+SELECT * FROM partida ORDER BY id DESC;
+SELECT * FROM jugador ORDER BY id DESC;
