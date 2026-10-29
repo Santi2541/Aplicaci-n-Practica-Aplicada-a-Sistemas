@@ -1,51 +1,77 @@
 # Documentación de Base de Datos y Conexión - Proyecto ALL TEN
 
-## 1. Definir con el equipo qué se va a almacenar en la base de datos
+## 1. Qué se almacena en la base de datos
 
-Para la arquitectura del juego, se decidió almacenar las combinaciones numéricas y sus soluciones precalculadas en lugar de procesarlas en tiempo de ejecución. Esta decisión técnica aporta las siguientes ventajas:
+Se almacena únicamente el **puntaje** de cada partida y su **nivel de dificultad**, asociados a un jugador.
 
-*   **Generación de partidas garantizadas:** Asegura que al jugador solo se le entreguen conjuntos de números que son matemáticamente posibles de resolver para todo el rango del 1 al 10.
-*   **Ahorro de procesamiento (Pre-cálculo):** Evita que Java tenga que calcular árboles de expresiones complejas y algoritmos de fuerza bruta en tiempo real.
-*   **Gestión de dificultad:** Permite clasificar los niveles según la cantidad de caminos o combinaciones posibles para llegar al resultado.
+| Decisión | Beneficio |
+|---|---|
+| Sin conjuntos ni soluciones almacenadas | Ahorro de espacio; la validación se calcula en Java (compromiso espacio-tiempo) |
+| Solo puntaje y dificultad por partida | Modelo mínimo, simple de implementar y mantener |
+| Registro de cada partida | Persistencia del historial y del puntaje entre sesiones |
+| Dificultad registrada por partida | Mantiene al jugador motivado (Teoría del Flujo) |
 
-## 2. Definir el modelo de datos (tablas/colecciones necesarias)
+---
 
-Se definió un modelo de datos relacional (MySQL) normalizado hasta la Tercera Forma Normal (3FN), compuesto por cuatro tablas principales:
+## 2. Modelo de datos
 
-### `conjuntos_base`
-Almacena los grupos de números iniciales que se entregan al jugador.
-*   `id_conjunto` (INT, Primary Key)
-*   `num_1` a `num_4` (INT): Valores base de la partida.
-*   `dificultad` (VARCHAR): Clasificación según combinaciones posibles.
+Modelo relacional en **MySQL**, normalizado hasta la Tercera Forma Normal (3FN), con dos tablas.
 
-### `soluciones_objetivo`
-Guarda las secuencias de operaciones precalculadas (1:N con `conjuntos_base`).
-*   `id_solucion` (INT, Primary Key)
-*   `id_conjunto` (INT, Foreign Key)
-*   `numero_objetivo` (INT): Resultado esperado (1 al 10).
-*   `expresion` (VARCHAR): Fórmula exacta (ej. `(num_1 + num_2) * num_3`).
+### Relaciones
+
+- `usuarios` 1:N `partidas_jugadas`
 
 ### `usuarios`
-Gestión de identidad de los jugadores.
-*   `id_usuario` (INT, Primary Key)
-*   `alias` (VARCHAR): Nombre en el juego.
-*   `fecha_registro` (DATETIME)
+
+Identidad de los jugadores.
+
+| Campo | Tipo | Restricciones | Descripción |
+|---|---|---|---|
+| `id_usuario` | INT | PK, AUTO_INCREMENT | Identificador del usuario |
+| `alias` | VARCHAR(50) | UNIQUE, NOT NULL | Nombre en el juego |
+| `fecha_registro` | DATETIME | NOT NULL | Fecha de creación |
 
 ### `partidas_jugadas`
-Entidad transaccional de métricas de juego.
-*   `id_partida` (INT, Primary Key)
-*   `id_usuario` (INT, Foreign Key)
-*   `id_conjunto` (INT, Foreign Key)
-*   `fecha_partida` (DATETIME)
-*   `tiempo_segundos` (INT)
-*   `estado` (VARCHAR): Ej. "Completado", "Abandonado".
 
-## 3. Documentar la configuración de conexión
+Puntaje obtenido en cada partida y su nivel de dificultad.
 
-El proyecto utiliza **Maven** para la gestión de dependencias y **JDBC** para la comunicación nativa con MySQL.
+| Campo | Tipo | Restricciones | Descripción |
+|---|---|---|---|
+| `id_partida` | INT | PK, AUTO_INCREMENT | Identificador de la partida |
+| `id_usuario` | INT | FK → `usuarios.id_usuario` | Jugador |
+| `puntaje` | INT | NOT NULL | Puntaje obtenido |
+| `dificultad` | VARCHAR(20) | NOT NULL | Nivel de la partida (ej. "Fácil", "Medio", "Difícil") |
+| `fecha_partida` | DATETIME | NOT NULL | Fecha de la partida |
 
-**Dependencia en `pom.xml`:**
-Extraída del repositorio central de Maven (versión estable LTS).
+### Script SQL
+
+```sql
+CREATE TABLE usuarios (
+    id_usuario     INT AUTO_INCREMENT PRIMARY KEY,
+    alias          VARCHAR(50) NOT NULL UNIQUE,
+    fecha_registro DATETIME NOT NULL
+);
+
+CREATE TABLE partidas_jugadas (
+    id_partida    INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario    INT NOT NULL,
+    puntaje       INT NOT NULL,
+    dificultad    VARCHAR(20) NOT NULL,
+    fecha_partida DATETIME NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+```
+
+---
+
+## 3. Configuración de conexión
+
+El proyecto usa **Maven** para la gestión de dependencias y **JDBC** para la comunicación nativa con MySQL.
+
+### Dependencia en `pom.xml`
+
+Obtenida del repositorio central de Maven (versión estable LTS).
+
 ```xml
 <dependencies>
     <!-- Driver de conexión para MySQL -->
@@ -55,3 +81,26 @@ Extraída del repositorio central de Maven (versión estable LTS).
         <version>8.4.0</version>
     </dependency>
 </dependencies>
+```
+
+### Parámetros de conexión
+
+| Parámetro | Valor |
+|---|---|
+| URL | `jdbc:mysql://localhost:3306/all_ten` |
+| Usuario | `<usuario>` |
+| Contraseña | `<contraseña>` |
+
+### Ejemplo en Java
+
+```java
+String url = "jdbc:mysql://localhost:3306/all_ten";
+String user = "<usuario>";
+String password = "<contraseña>";
+
+try (Connection conn = DriverManager.getConnection(url, user, password)) {
+    System.out.println("Conexión exitosa");
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+```
