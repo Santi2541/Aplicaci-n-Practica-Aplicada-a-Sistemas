@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="591.0" prefWidth="476.0" spacing="15.0"
+      styleClass="root-container" stylesheets="@style.css"
+      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.poli.all10.controller.RegistroController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+
+      <!-- ENCABEZADO -->
+      <VBox alignment="CENTER" spacing="2.0">
+         <children>
+            <Label styleClass="titulo-principal" text="AllTen" />
+            <Label styleClass="subtexto-gris" text="Operaciones combinadas" />
+         </children>
+      </VBox>
+
+      <!-- TARJETA DE REGISTRO -->
+      <VBox spacing="8.0" styleClass="card-blanca">
+         <children>
+            <Label styleClass="titulo-seccion-morado" text="CREAR CUENTA" textFill="#7c3aed" />
+            <Label styleClass="microcopia" text="Elige un nombre de usuario único y una contraseña" wrapText="true" />
+
+            <Label styleClass="titulo-subseccion" text="USUARIO">
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="txtUsuario" promptText="Nombre de usuario" />
+
+            <Label styleClass="titulo-subseccion" text="CONTRASEÑA" />
+            <PasswordField fx:id="txtClave" promptText="Mínimo 6 caracteres" />
+
+            <Label styleClass="titulo-subseccion" text="CONFIRMAR CONTRASEÑA" />
+            <PasswordField fx:id="txtConfirmacion" promptText="Repite la contraseña" />
+
+            <Label fx:id="lblError" maxWidth="1.0E38" wrapText="true" />
+
+            <Button defaultButton="true" maxWidth="1.0E38" onAction="#registrar"
+                    styleClass="btn-accion, btn-verificar" text="✓ Registrarme">
+               <VBox.margin>
+                  <Insets top="8.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+
+   </children>
+</VBox>
