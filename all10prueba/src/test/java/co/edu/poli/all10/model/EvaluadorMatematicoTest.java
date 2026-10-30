@@ -83,5 +83,41 @@ class EvaluadorMatematicoTest {
         double resultado = evaluador.evaluar(expresion.replace("×", "*").replace("÷", "/"));
         assertEquals(8.0, resultado, "La operación (9-6)+3+2 debe evaluar exactamente a 8.0");
     }
+    
+    @Test
+    void testRaizCuadrada() {
+        assertEquals(3.0, evaluador.evaluar("√ 9"), 1e-9);
+    }
+
+    @Test
+    void testRaizDeExpresionConParentesis() {
+        assertEquals(3.0, evaluador.evaluar("√ ( 4 + 5 )"), 1e-9);
+    }
+
+    @Test
+    void testPotencia() {
+        assertEquals(9.0, evaluador.evaluar("3 ^ 2"), 1e-9);
+    }
+
+    @Test
+    void testPotenciaTieneMasPrecedenciaQueMultiplicacion() {
+        assertEquals(18.0, evaluador.evaluar("2 * 3 ^ 2"), 1e-9);
+    }
+
+    @Test
+    void testSimbolosVisualesDePotencia() {
+        assertEquals(9.0, evaluador.evaluar("3 xʸ 2"), 1e-9);
+        assertEquals(9.0, evaluador.evaluar("3²"), 1e-9);
+    }
+
+    @Test
+    void testRaizYPotenciaCombinadas() {
+        assertEquals(8.0, evaluador.evaluar("√ 9 + 3 ^ 2 - 6 + 2"), 1e-9);
+    }
+
+    @Test
+    void testRaizDeNegativoLanzaArithmeticException() {
+        assertThrows(ArithmeticException.class, () -> evaluador.evaluar("√ ( 3 - 7 )"));
+    }
 
 }

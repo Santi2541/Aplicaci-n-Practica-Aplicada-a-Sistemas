@@ -1,13 +1,29 @@
 package co.edu.poli.all10.modelo;
-//Manipula la expresion matematica//
+
+/**
+ * Manipula y evalúa la expresión matemática del juego.
+ * <p>
+ * Soporta {@code + - * / ( )}, la raíz cuadrada {@code √} y la potencia {@code ^}.
+ * También acepta los símbolos visuales {@code × ÷ xʸ ² ³}.
+ */
 public class Evaluador {
 	
+	/**
+     * Limpia la expresión (símbolos visuales) y la evalúa.
+     *
+     * @param expresion Expresión tal como la arma el jugador.
+     * @return Resultado numérico.
+     * @throws ArithmeticException si hay división por cero, raíz negativa o potencia indefinida.
+     * @throws RuntimeException    si la sintaxis es inválida.
+     */
 	public double evaluar(String expresion) {
         String limpia = expresion.trim();
         if (limpia.contains(":")) {
             limpia = limpia.split(":")[1].trim();
         }
-        limpia = limpia.replace("×", "*").replace("÷", "/");
+        limpia = limpia.replace("×", "*").replace("÷", "/")
+                       .replace("xʸ", "^")
+                       .replace("²", "^2").replace("³", "^3");
         return evaluarCadenaMatematica(limpia);
     }
 	/**
@@ -19,7 +35,7 @@ public class Evaluador {
      * @throws RuntimeException Si la sintaxis es inválida o contiene caracteres inesperados.
      * @throws ArithmeticException Si ocurre una división por cero.
      */
-    public double evaluarCadenaMatematica(final String str) {
+	public double evaluarCadenaMatematica(final String str) {
         return new Object() {
             int pos = -1, ch;
 
@@ -39,7 +55,7 @@ public class Evaluador {
             double parse() {
                 nextChar();
                 double x = parseExpression();
-                if (pos < str.length()) throw new RuntimeException("Carácter inesperado: " + (char)ch);
+                if (pos < str.length()) throw new RuntimeException("Carácter inesperado: " + (char) ch);
                 return x;
             }
 
@@ -53,11 +69,11 @@ public class Evaluador {
             }
 
             double parseTerm() {
-                double x = parseFactor();
+                double x = parseUnary();
                 for (;;) {
-                    if      (eat('*')) x *= parseFactor();
+                    if      (eat('*')) x *= parseUnary();
                     else if (eat('/')) {
-                        double divisor = parseFactor();
+                        double divisor = parseUnary();
                         if (divisor == 0) throw new ArithmeticException("División por cero");
                         x /= divisor;
                     }
@@ -65,9 +81,31 @@ public class Evaluador {
                 }
             }
 
-            double parseFactor() {
-                if (eat('+')) return parseFactor();
-                if (eat('-')) return -parseFactor();
+            double parseUnary() {
+                if (eat('+')) return parseUnary();
+                if (eat('-')) return -parseUnary();
+                return parsePower();
+            }
+
+            double parsePower() {
+                double base = parsePrimary();
+                if (eat('^')) {
+                    double exponente = parseUnary();   // asociatividad por la derecha
+                    double r = Math.pow(base, exponente);
+                    if (Double.isNaN(r) || Double.isInfinite(r)) {
+                        throw new ArithmeticException("Potencia indefinida");
+                    }
+                    return r;
+                }
+                return base;
+            }
+
+            double parsePrimary() {
+                if (eat('√')) {
+                    double radicando = parsePrimary();
+                    if (radicando < 0) throw new ArithmeticException("Raíz de un número negativo");
+                    return Math.sqrt(radicando);
+                }
 
                 double x;
                 int startPos = this.pos;

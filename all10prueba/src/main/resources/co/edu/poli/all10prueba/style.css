@@ -119,3 +119,80 @@
     -fx-background-radius: 0 0 10px 10px;
     -fx-padding: 10px;
 }
+
+.btn-dificultad { -fx-background-color: #EDE7F6; -fx-border-color: #B39DDB; -fx-text-fill: #512DA8;
+ }
+ 
+ /* ===== Dificultad: Raíz y potencia ===== */
+ .texto-tiempo {
+     -fx-font-size: 20px;
+     -fx-text-fill: #7C3AED;
+ }
+
+ .texto-pistas {
+     -fx-font-size: 13px;
+     -fx-text-fill: #424242;
+ }
+
+ .circulo-pista {
+     -fx-min-width: 16px;
+     -fx-min-height: 16px;
+     -fx-max-width: 16px;
+     -fx-max-height: 16px;
+     -fx-background-color: #FFFFFF;
+     -fx-background-radius: 50px;
+     -fx-border-color: #BDBDBD;
+     -fx-border-radius: 50px;
+ }
+ .circulo-pista-usada {
+     -fx-background-color: #FCD34D;
+     -fx-border-color: #F59E0B;
+ }
+
+ .card-objetivos {
+     -fx-background-color: #F3F0FF;
+     -fx-background-radius: 16px;
+     -fx-border-color: #E1D9F7;
+     -fx-border-radius: 16px;
+     -fx-padding: 12px;
+ }
+
+ .badge-dificultad {
+     -fx-background-color: #E1D9F7;
+     -fx-background-radius: 10px;
+     -fx-text-fill: #6A1B9A;
+     -fx-font-size: 10px;
+     -fx-font-weight: bold;
+     -fx-padding: 2 8;
+ }
+
+ .leyenda-item { -fx-font-size: 12px; -fx-text-fill: #455A64; }
+ .leyenda-completado { -fx-text-fill: #2E7D32; }
+ .leyenda-actual { -fx-text-fill: #7E57C2; }
+
+ .card-respuesta {
+     -fx-background-color: #FFFFFF;
+     -fx-background-radius: 16px;
+     -fx-border-color: #A5D6A7;
+     -fx-border-radius: 16px;
+     -fx-border-width: 2px;
+     -fx-padding: 10px;
+ }
+ .icono-respuesta {
+     -fx-background-color: #F1F1F1;
+     -fx-background-radius: 50px;
+     -fx-min-width: 36px;
+     -fx-min-height: 36px;
+     -fx-alignment: center;
+     -fx-text-fill: #9E9E9E;
+     -fx-font-size: 18px;
+     -fx-font-weight: bold;
+ }
+
+ .btn-pista { -fx-background-color: #FFF9C4; -fx-border-color: #FFF59D; -fx-text-fill: #5D4037; }
+
+ .footer-leyenda { -fx-padding: 6 0 0 0; }
+ .lbl-bold { -fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #37474F; }
+ 
+ .icono-respuesta-ok    { -fx-background-color: #C8E6C9; -fx-text-fill: #2E7D32; }
+ .icono-respuesta-error { -fx-background-color: #FFCDD2; -fx-text-fill: #C62828; }

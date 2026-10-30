@@ -9,7 +9,7 @@ public class ConexionDB {
 
     private static final String URL = "jdbc:mysql://localhost:3306/all10?useSSL=false&serverTimezone=UTC";
     private static final String USUARIO = "root";
-    private static final String CLAVE = "Lupita077.$";
+    private static final String CLAVE = "081305_D4";
 
     /**
      * Abre una conexión nueva; quien la recibe debe cerrarla.

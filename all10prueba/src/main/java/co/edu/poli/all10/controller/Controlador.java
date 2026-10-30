@@ -1,5 +1,6 @@
 package co.edu.poli.all10.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -12,6 +13,7 @@ import co.edu.poli.all10.modelo.JuegoAllTen;
 import co.edu.poli.all10.modelo.Jugador;
 import co.edu.poli.all10.modelo.Numeros;
 import co.edu.poli.all10.modelo.Ranking;
+import co.edu.poli.all10.vista.App;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -36,6 +38,8 @@ public class Controlador implements Initializable {
 
     @FXML private Label lblExpresion;
     @FXML private Label lblTiempo;
+    @FXML private Label lblIconoRespuesta;
+    @FXML private Label lblRespuesta;
 
     @FXML private Button btnNum1;
     @FXML private Button btnNum2;
@@ -247,6 +251,16 @@ public class Controlador implements Initializable {
             nums[i].setDisable(juego.estaUsado(i));
         }
     }
+    
+    /** Muestra en la tarjeta de respuesta un icono, un texto y el estilo (ok o error). */
+    private void mostrarRespuesta(String icono, String texto, String estilo) {
+        if (lblIconoRespuesta == null || lblRespuesta == null) return;
+        lblIconoRespuesta.getStyleClass().removeAll("icono-respuesta-ok", "icono-respuesta-error");
+        if (estilo != null) lblIconoRespuesta.getStyleClass().add(estilo);
+        lblIconoRespuesta.setText(icono);
+        lblRespuesta.setText(texto);
+    }
+
 
     /**
      * Evalúa la operación matemática ingresada en pantalla.
@@ -261,6 +275,15 @@ public class Controlador implements Initializable {
     public void calcularResultado(ActionEvent event) {
         int paso = juego.calcular();
         lblExpresion.setText(juego.getExpresion());
+        
+        if (paso > 0) {
+            mostrarRespuesta("✔", "¡Correcto! Objetivo " + paso, "icono-respuesta-ok");
+        } else if (!juego.todosLosNumerosUsados()) {
+            mostrarRespuesta("!", "Usa los 4 números", "icono-respuesta-error");
+        } else {
+            mostrarRespuesta("✖", "Incorrecto", "icono-respuesta-error");
+        }
+        
         if (paso > 0) {
             pasosLogrados[paso - 1] = true;
             marcarPasoComoCompletado(paso);
@@ -392,5 +415,11 @@ public class Controlador implements Initializable {
             if (logrado) total++;
         }
         return total;
+    }
+    
+    @FXML
+    private void abrirDificultad(ActionEvent event) throws IOException {
+        detenerActualizadorTiempo();
+        App.setRoot("escenario2");
     }
 }

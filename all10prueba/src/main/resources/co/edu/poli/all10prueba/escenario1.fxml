@@ -9,29 +9,31 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="591.0" prefWidth="476.0" spacing="15.0" styleClass="root-container" stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.poli.all10.controller.Controlador">
+<VBox alignment="TOP_CENTER" prefHeight="650.0" prefWidth="476.0" spacing="15.0" styleClass="root-container" 
+	stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" 
+	fx:controller="co.edu.poli.all10.controller.Controlador">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
+   </padding>	
    <children>
       
       <!-- BLOQUE SUPERIOR: Encabezado -->
       <HBox alignment="CENTER" prefHeight="64.0" prefWidth="436.0" spacing="10.0">
          <children>
             <!-- Indicador de Tiempo -->
-            <VBox alignment="CENTER_LEFT" prefHeight="204.0" prefWidth="55.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="90.0">
                <children>
-                  <Label fx:id="lblTiempo" styleClass="texto-tiempo" text="⏰ 00:00" textFill="#7c3aed" />
+                  <Label fx:id="lblTiempo" prefHeight="24.0" prefWidth="86.0" styleClass="texto-tiempo" text="⏰ 00:00" textFill="#7c3aed" />
                   <Label styleClass="subtexto-gris" text="TIEMPO" textFill="#a78bfa" />
                </children>
             </VBox>
             
-            <Region prefHeight="34.0" prefWidth="60.0" HBox.hgrow="ALWAYS" />
+            <Region prefHeight="37.0" prefWidth="13.0" HBox.hgrow="ALWAYS" />
             
             <!-- Título Central -->
             <VBox alignment="CENTER" prefWidth="112.0">
                <children>
-                  <Label styleClass="titulo-principal" text="AllTen">
+                  <Label prefHeight="24.0" prefWidth="66.0" styleClass="titulo-principal" text="AllTen">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -52,18 +54,18 @@
          </children>
       </HBox>
       
-      <TitledPane animated="true" expanded="false" text="📖 Reglas del Juego" styleClass="desplegable-reglas">
+      <TitledPane animated="true" expanded="false" styleClass="desplegable-reglas" text="📖 Reglas del Juego">
 		   <content>
 		      <VBox spacing="8.0">
 		         <children>
 		            <Label text="1. Cada objetivo da la misma cantidad de puntos." wrapText="true" />
-		            <Label text="-> Each target awards the same amount of points." wrapText="true" />
+		            <Label text="-&gt; Each target awards the same amount of points." wrapText="true" />
 		            <Label text="2. El proceso parcial se pierde al salir." wrapText="true" />
-		            <Label text="-> Partial progress is lost when the player leaves." wrapText="true" />
+		            <Label text="-&gt; Partial progress is lost when the player leaves." wrapText="true" />
 		            <Label text="3. No se pierden puntos." wrapText="true" />
-		            <Label text="-> No points are lost." wrapText="true" />
+		            <Label text="-&gt; No points are lost." wrapText="true" />
 		            <Label text="4. El jugador puede seguir intentando un objetivo siempre que quiera." wrapText="true" />
-		            <Label text="-> The player can keep trying a target indefinitely." wrapText="true" />
+		            <Label text="-&gt; The player can keep trying a target indefinitely." wrapText="true" />
 		         </children>
 		      </VBox>
 		   </content>
@@ -116,12 +118,12 @@
             </VBox>
             
             <!-- Área de Resultado / Feedback -->
-            <VBox alignment="CENTER" minWidth="120.0" styleClass="card-feedback">
-               <children>
-                  <Label styleClass="icono-check" text="🧮" />
-                  <Label styleClass="texto-esperando" text="Esperando..." />
-               </children>
-            </VBox>
+            <VBox alignment="CENTER" minWidth="120.0" spacing="4.0" styleClass="card-respuesta">
+			   <children>
+			      <Label fx:id="lblIconoRespuesta" styleClass="icono-respuesta" text="?" />
+			      <Label fx:id="lblRespuesta" styleClass="microcopia" text="Tu respuesta" />
+			   </children>
+			</VBox>
          </children>
       </HBox>
 
@@ -185,5 +187,7 @@
          </children>
       </HBox>
       
+     <Button fx:id="btnDificultad" maxWidth="1.0E38" onAction="#abrirDificultad" styleClass="btn-accion, btn-dificultad" text="🔥 Probar nueva dificultad" />
+        
    </children>
 </VBox>
