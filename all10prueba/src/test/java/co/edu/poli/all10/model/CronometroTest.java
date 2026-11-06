@@ -115,4 +115,17 @@ class CronometroTest {
         assertFalse(j.isPartidaTerminada());
         assertEquals(0, j.getSegundos());
     }
+    
+    /** Test de uso en 2 numeros */
+    @Test
+    void operacionParcialMuestraResultadoSinCompletarObjetivo() {
+        JuegoAllTen j = new JuegoAllTen();
+        j.agregarSimbolo("9"); j.usarNumero(0);
+        j.agregarSimbolo("-");
+        j.agregarSimbolo("6"); j.usarNumero(1);
+
+        assertEquals(0, j.calcular());          // no completa objetivo
+        assertEquals("3", j.getExpresion());    // pero muestra el resultado
+        assertFalse(j.isPasoCompletado(3));
+    }
 }

@@ -171,9 +171,11 @@ public class JuegoAllTen {
      *         o si la jugada no es válida.
      */
     public int calcular() {
-        if (!todosLosNumerosUsados() || expresion.trim().isEmpty()) {
-            return 0;
-        }
+        if (expresion.trim().isEmpty()) return 0;
+
+        boolean completa = todosLosNumerosUsados();
+        if (!completa && cantidadNumerosUsados() < 2) return 0;
+
         indicesPorSimbolo.clear();
         try {
             String e = expresion.trim();
@@ -185,10 +187,11 @@ public class JuegoAllTen {
             if (Math.abs(r - Math.round(r)) < 1e-9) {
                 int entero = (int) Math.round(r);
                 expresion = String.valueOf(entero);
-                if (entero >= 1 && entero <= 10) {
+                // Solo cuenta como objetivo si se usaron los 4 números
+                if (completa && entero >= 1 && entero <= 10) {
                     pasosCompletados[entero - 1] = true;
-                    if (todosLosPasosCompletados()) {          
-                        cronometro.detener();                 
+                    if (todosLosPasosCompletados()) {
+                        cronometro.detener();
                         tiempoFinal = cronometro.obtenerSegundos();
                     }
                     return entero;
@@ -209,6 +212,13 @@ public class JuegoAllTen {
     public void abandonarPartida() {
         cronometro.descartar();
         tiempoFinal = -1;
+    }
+    
+    /** @return Cantidad de números base (0 a 4) usados en la expresión. */
+    public int cantidadNumerosUsados() {
+        int total = 0;
+        for (boolean usado : numerosUsados) if (usado) total++;
+        return total;
     }
     
 }

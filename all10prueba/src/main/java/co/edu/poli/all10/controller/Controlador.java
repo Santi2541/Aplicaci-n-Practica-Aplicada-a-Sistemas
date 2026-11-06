@@ -278,8 +278,14 @@ public class Controlador implements Initializable {
         
         if (paso > 0) {
             mostrarRespuesta("✔", "¡Correcto! Objetivo " + paso, "icono-respuesta-ok");
+        } else if ("Error".equals(juego.getExpresion())) {
+            mostrarRespuesta("✖", "Operación inválida", "icono-respuesta-error");
         } else if (!juego.todosLosNumerosUsados()) {
-            mostrarRespuesta("!", "Usa los 4 números", "icono-respuesta-error");
+            if (juego.cantidadNumerosUsados() < 2) {
+                mostrarRespuesta("!", "Usa al menos 2 números", "icono-respuesta-error");
+            } else {
+                mostrarRespuesta("=", "Resultado: " + juego.getExpresion(), null);
+            }
         } else {
             mostrarRespuesta("✖", "Incorrecto", "icono-respuesta-error");
         }
