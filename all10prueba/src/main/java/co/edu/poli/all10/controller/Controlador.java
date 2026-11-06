@@ -3,6 +3,7 @@ package co.edu.poli.all10.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -13,16 +14,20 @@ import co.edu.poli.all10.modelo.GestorIdioma;
 import co.edu.poli.all10.modelo.JuegoAllTen;
 import co.edu.poli.all10.modelo.Jugador;
 import co.edu.poli.all10.modelo.Numeros;
+import co.edu.poli.all10.modelo.Partida;
 import co.edu.poli.all10.modelo.Ranking;
+import co.edu.poli.all10.modelo.SesionActual;
 import co.edu.poli.all10.vista.App;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.util.Duration;
 
@@ -33,8 +38,8 @@ import javafx.util.Duration;
  * <p>
  * Se encarga de procesar la entrada de botones, restringir el uso de números repetidos,
  * evaluar la expresión matemática ingresada y actualizar el progreso de los objetivos.
- * Al terminar la partida pide el nombre del jugador y guarda su puntaje y el ranking
- * en la base de datos.
+ * Al terminar la partida guarda el resultado a nombre del jugador con sesión iniciada
+ * (si no hay sesión, pide el nombre) y permite cerrar la sesión y ver sus resultados.
  */
 public class Controlador implements Initializable {
 
@@ -286,7 +291,7 @@ public class Controlador implements Initializable {
      * Valida de forma estricta que los 4 números base hayan sido utilizados. Si la operación
      * es válida y da como resultado un número entero entre 1 y 10, marca el objetivo
      * correspondiente como completado en la interfaz. Cuando se completa la partida,
-     * detiene el reloj, pide el nombre del jugador y guarda el resultado.
+     * detiene el reloj y guarda el resultado a nombre del jugador con sesión.
      *
      * @param event El evento de acción disparado por el botón Verificar.
      */
@@ -315,7 +320,7 @@ public class Controlador implements Initializable {
             if (juego.isPartidaTerminada()) {
                 detenerActualizadorTiempo();
                 actualizarLabelTiempo();
-                pedirNombreYGuardar(contarObjetivosCompletados(), juego.getSegundos());
+                guardarAlTerminar(contarObjetivosCompletados(), juego.getSegundos());
             }
         }
     }
@@ -418,6 +423,7 @@ public class Controlador implements Initializable {
 
     /**
      * Pide el nombre al jugador con una ventana y guarda su resultado.
+     * Solo se usa cuando no hay una sesión iniciada.
      *
      * @param objetivos Objetivos completados (0 a 10).
      * @param segundos  Tiempo de la partida en segundos.
@@ -433,6 +439,28 @@ public class Controlador implements Initializable {
               .ifPresent(n -> guardarResultado(n, objetivos, segundos));
     }
 
+    /**
+     * Guarda el resultado a nombre del jugador con sesión iniciada.
+     * Si por alguna razón no hay sesión, pide el nombre como antes.
+     *
+     * @param objetivos Objetivos completados (0 a 10).
+     * @param segundos  Tiempo de la partida en segundos.
+     */
+    private void guardarAlTerminar(int objetivos, int segundos) {
+        Jugador actual = SesionActual.getJugador();
+        if (actual == null) {
+            pedirNombreYGuardar(objetivos, segundos);
+            return;
+        }
+        guardarResultado(actual.getNombre(), objetivos, segundos);
+
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle(GestorIdioma.get("dialogo.titulo"));
+        alerta.setHeaderText(GestorIdioma.get("dialogo.cabecera",
+                objetivos * Jugador.PUNTOS_POR_OBJETIVO, objetivos, segundos));
+        alerta.showAndWait();
+    }
+
     /** @return Cantidad de objetivos (1 a 10) logrados en la partida actual. */
     private int contarObjetivosCompletados() {
         int total = 0;
@@ -440,6 +468,57 @@ public class Controlador implements Initializable {
             if (logrado) total++;
         }
         return total;
+    }
+
+    /** Cierra la sesión: detiene el reloj, descarta la partida y vuelve al inicio de sesión. */
+    @FXML
+    private void cerrarSesion(ActionEvent event) {
+        detenerActualizadorTiempo();
+        juego.abandonarPartida();
+        SesionActual.cerrar();
+        try {
+            App.setRoot("registro");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** Muestra mejor puntaje, mejor tiempo, posición e historial del jugador con sesión. */
+    @FXML
+    private void verMisResultados(ActionEvent event) {
+        Jugador actual = SesionActual.getJugador();
+        if (actual == null) {
+            return;
+        }
+        try {
+            Jugador datos = jugadorDAO.obtenerJugador(actual.getNombre());
+            int posicion = jugadorDAO.obtenerPosicion(actual.getNombre());
+            List<Partida> partidas = jugadorDAO.listarPartidas(actual.getNombre());
+
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            StringBuilder sb = new StringBuilder();
+            if (partidas.isEmpty()) {
+                sb.append(GestorIdioma.get("sesion.historial.vacio"));
+            }
+            for (Partida p : partidas) {
+                sb.append(GestorIdioma.get("sesion.historial.linea",
+                        p.getPuntaje(), p.getObjetivosCompletados(), p.getTiempo(),
+                        p.getFecha().format(formato))).append("\n");
+            }
+
+            TextArea area = new TextArea(sb.toString());
+            area.setEditable(false);
+            area.setPrefRowCount(10);
+
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle(GestorIdioma.get("sesion.resultados.titulo"));
+            alerta.setHeaderText(GestorIdioma.get("sesion.resultados.cabecera",
+                    datos.getPuntaje(), datos.getMejorTiempo(), posicion));
+            alerta.getDialogPane().setContent(area);
+            alerta.showAndWait();
+        } catch (SQLException e) {
+            System.err.println("No se pudieron consultar los resultados: " + e.getMessage());
+        }
     }
 
     @FXML

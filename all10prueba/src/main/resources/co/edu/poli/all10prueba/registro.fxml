@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.PasswordField?>
@@ -21,7 +22,7 @@
       <!-- SELECTOR DE IDIOMA -->
       <HBox alignment="CENTER_RIGHT">
          <children>
-            <MenuButton fx:id="btnIdioma" styleClass="btn-idioma" text="🌐" />
+            <MenuButton fx:id="btnIdioma" styleClass="btn-idioma" text="&#127760;" />
          </children>
       </HBox>
 
@@ -33,11 +34,11 @@
          </children>
       </VBox>
 
-      <!-- TARJETA DE REGISTRO -->
+      <!-- TARJETA: LOGIN / REGISTRO / RECUPERAR -->
       <VBox spacing="8.0" styleClass="card-blanca">
          <children>
-            <Label styleClass="titulo-seccion-morado" text="%registro.titulo" textFill="#7c3aed" />
-            <Label styleClass="microcopia" text="%registro.ayuda" wrapText="true" />
+            <Label fx:id="lblTitulo" styleClass="titulo-seccion-morado" text="%login.titulo" textFill="#7c3aed" />
+            <Label fx:id="lblAyuda" styleClass="microcopia" text="%login.ayuda" wrapText="true" />
 
             <Label styleClass="titulo-subseccion" text="%registro.usuario">
                <VBox.margin>
@@ -46,20 +47,31 @@
             </Label>
             <TextField fx:id="txtUsuario" promptText="%registro.usuario.prompt" />
 
-            <Label styleClass="titulo-subseccion" text="%registro.clave" />
+            <Label fx:id="lblCodigo" managed="false" styleClass="titulo-subseccion" text="%recuperar.codigo" visible="false" />
+            <TextField fx:id="txtCodigo" managed="false" promptText="%recuperar.codigo.prompt" visible="false" />
+
+            <Label fx:id="lblClave" styleClass="titulo-subseccion" text="%registro.clave" />
             <PasswordField fx:id="txtClave" promptText="%registro.clave.prompt" />
 
-            <Label styleClass="titulo-subseccion" text="%registro.confirmar" />
-            <PasswordField fx:id="txtConfirmacion" promptText="%registro.confirmar.prompt" />
+            <Label fx:id="lblConfirmar" managed="false" styleClass="titulo-subseccion" text="%registro.confirmar" visible="false" />
+            <PasswordField fx:id="txtConfirmacion" managed="false" promptText="%registro.confirmar.prompt" visible="false" />
 
             <Label fx:id="lblError" maxWidth="1.0E38" wrapText="true" />
 
-            <Button defaultButton="true" maxWidth="1.0E38" onAction="#registrar"
-                    styleClass="btn-accion, btn-verificar" text="%registro.boton">
+            <Button fx:id="btnAccion" defaultButton="true" maxWidth="1.0E38" onAction="#accionPrincipal"
+                    styleClass="btn-accion, btn-verificar" text="%login.boton">
                <VBox.margin>
                   <Insets top="8.0" />
                </VBox.margin>
             </Button>
+
+            <VBox alignment="CENTER" spacing="2.0">
+               <children>
+                  <Hyperlink fx:id="lnkOlvide" onAction="#irARecuperar" text="%login.olvide" />
+                  <Hyperlink fx:id="lnkCrearCuenta" onAction="#irARegistro" text="%login.crearCuenta" />
+                  <Hyperlink fx:id="lnkIniciarSesion" managed="false" onAction="#irALogin" text="%registro.yaTienesCuenta" visible="false" />
+               </children>
+            </VBox>
          </children>
       </VBox>
 
