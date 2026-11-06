@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import co.edu.poli.all10.DAO.JugadorDAO;
 import co.edu.poli.all10.DAO.PartidaDAO;
+import co.edu.poli.all10.modelo.GestorIdioma;
 import co.edu.poli.all10.modelo.JuegoAllTen;
 import co.edu.poli.all10.modelo.Jugador;
 import co.edu.poli.all10.modelo.Numeros;
@@ -21,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextInputDialog;
 import javafx.util.Duration;
 
@@ -40,6 +42,8 @@ public class Controlador implements Initializable {
     @FXML private Label lblTiempo;
     @FXML private Label lblIconoRespuesta;
     @FXML private Label lblRespuesta;
+
+    @FXML private MenuButton btnIdioma;
 
     @FXML private Button btnNum1;
     @FXML private Button btnNum2;
@@ -93,6 +97,8 @@ public class Controlador implements Initializable {
 
         inicializarComponentesSeguros();
 
+        SelectorIdioma.configurar(btnIdioma, this::cambiarIdioma);
+
         mostrarNumerosDelDia();
 
         establecerListaIncompleta();
@@ -110,6 +116,20 @@ public class Controlador implements Initializable {
                 lblExpresion.requestFocus();
             }
         });
+    }
+
+    /**
+     * Cambia el idioma: detiene el reloj, abandona la partida en curso
+     * y recarga la vista con los textos del nuevo idioma.
+     */
+    private void cambiarIdioma() {
+        detenerActualizadorTiempo();
+        juego.abandonarPartida();
+        try {
+            App.recargar();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -251,7 +271,7 @@ public class Controlador implements Initializable {
             nums[i].setDisable(juego.estaUsado(i));
         }
     }
-    
+
     /** Muestra en la tarjeta de respuesta un icono, un texto y el estilo (ok o error). */
     private void mostrarRespuesta(String icono, String texto, String estilo) {
         if (lblIconoRespuesta == null || lblRespuesta == null) return;
@@ -260,7 +280,6 @@ public class Controlador implements Initializable {
         lblIconoRespuesta.setText(icono);
         lblRespuesta.setText(texto);
     }
-
 
     /**
      * Evalúa la operación matemática ingresada en pantalla.
@@ -275,21 +294,21 @@ public class Controlador implements Initializable {
     public void calcularResultado(ActionEvent event) {
         int paso = juego.calcular();
         lblExpresion.setText(juego.getExpresion());
-        
+
         if (paso > 0) {
-            mostrarRespuesta("✔", "¡Correcto! Objetivo " + paso, "icono-respuesta-ok");
+            mostrarRespuesta("✔", GestorIdioma.get("juego.correcto", paso), "icono-respuesta-ok");
         } else if ("Error".equals(juego.getExpresion())) {
-            mostrarRespuesta("✖", "Operación inválida", "icono-respuesta-error");
+            mostrarRespuesta("✖", GestorIdioma.get("juego.invalida"), "icono-respuesta-error");
         } else if (!juego.todosLosNumerosUsados()) {
             if (juego.cantidadNumerosUsados() < 2) {
-                mostrarRespuesta("!", "Usa al menos 2 números", "icono-respuesta-error");
+                mostrarRespuesta("!", GestorIdioma.get("juego.minimo"), "icono-respuesta-error");
             } else {
-                mostrarRespuesta("=", "Resultado: " + juego.getExpresion(), null);
+                mostrarRespuesta("=", GestorIdioma.get("juego.resultado", juego.getExpresion()), null);
             }
         } else {
-            mostrarRespuesta("✖", "Incorrecto", "icono-respuesta-error");
+            mostrarRespuesta("✖", GestorIdioma.get("juego.incorrecto"), "icono-respuesta-error");
         }
-        
+
         if (paso > 0) {
             pasosLogrados[paso - 1] = true;
             marcarPasoComoCompletado(paso);
@@ -405,10 +424,10 @@ public class Controlador implements Initializable {
      */
     private void pedirNombreYGuardar(int objetivos, int segundos) {
         TextInputDialog dialogo = new TextInputDialog();
-        dialogo.setTitle("Guardar resultado");
-        dialogo.setHeaderText("Puntaje: " + objetivos * Jugador.PUNTOS_POR_OBJETIVO
-                + " (" + objetivos + " objetivos, " + segundos + " s)");
-        dialogo.setContentText("Tu nombre:");
+        dialogo.setTitle(GestorIdioma.get("dialogo.titulo"));
+        dialogo.setHeaderText(GestorIdioma.get("dialogo.cabecera",
+                objetivos * Jugador.PUNTOS_POR_OBJETIVO, objetivos, segundos));
+        dialogo.setContentText(GestorIdioma.get("dialogo.nombre"));
         Optional<String> nombre = dialogo.showAndWait();
         nombre.filter(n -> !n.trim().isEmpty())
               .ifPresent(n -> guardarResultado(n, objetivos, segundos));
@@ -422,7 +441,7 @@ public class Controlador implements Initializable {
         }
         return total;
     }
-    
+
     @FXML
     private void abrirDificultad(ActionEvent event) throws IOException {
         detenerActualizadorTiempo();

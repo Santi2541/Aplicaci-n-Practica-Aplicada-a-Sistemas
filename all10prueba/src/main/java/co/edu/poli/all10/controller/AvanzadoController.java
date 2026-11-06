@@ -1,23 +1,21 @@
 package co.edu.poli.all10.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import co.edu.poli.all10.modelo.Cronometro;
+import co.edu.poli.all10.modelo.GestorIdioma;
 import co.edu.poli.all10.modelo.JuegoAllTen;
+import co.edu.poli.all10.modelo.Numeros;
+import co.edu.poli.all10.vista.App;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.util.Duration;
-
-import java.util.List;
-
-import co.edu.poli.all10.modelo.Numeros;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.util.Duration;
 
 /**
  * Controlador de la pantalla de dificultad "Raíz y potencia".
@@ -31,13 +29,15 @@ public class AvanzadoController {
     @FXML private Label lblExpresion;
     @FXML private Label lblIconoRespuesta;
     @FXML private Label lblRespuesta;
-    
+
+    @FXML private MenuButton btnIdioma;
+
     @FXML private Button btnNum1;
     @FXML private Button btnNum2;
     @FXML private Button btnNum3;
     @FXML private Button btnNum4;
     @FXML private Button btnPotencia;
-    
+
     @FXML private Button btnPaso1;
     @FXML private Button btnPaso2;
     @FXML private Button btnPaso3;
@@ -49,7 +49,6 @@ public class AvanzadoController {
     @FXML private Button btnPaso9;
     @FXML private Button btnPaso10;
 
-    
     private final JuegoAllTen juego = new JuegoAllTen();
     private Button[] arregloPasos;
     private Timeline actualizadorTiempo;
@@ -58,16 +57,17 @@ public class AvanzadoController {
     /** JavaFX lo llama solo al cargar el FXML: arranca el reloj. */
     @FXML
     public void initialize() {
-    	arregloPasos = new Button[]{
+        arregloPasos = new Button[]{
                 btnPaso1, btnPaso2, btnPaso3, btnPaso4, btnPaso5,
                 btnPaso6, btnPaso7, btnPaso8, btnPaso9, btnPaso10
             };
-    	
-    	mostrarNumerosDelDia();
-    	
+
+        SelectorIdioma.configurar(btnIdioma, this::cambiarIdioma);
+
+        mostrarNumerosDelDia();
 
         juego.iniciarPartida();
-        
+
         cronometro.iniciar();
         actualizarLabelTiempo();
 
@@ -75,6 +75,21 @@ public class AvanzadoController {
                 new KeyFrame(Duration.seconds(1), e -> actualizarLabelTiempo()));
         actualizadorTiempo.setCycleCount(Timeline.INDEFINITE);
         actualizadorTiempo.play();
+    }
+
+    /**
+     * Cambia el idioma: detiene el reloj, abandona la partida en curso
+     * y recarga la vista con los textos del nuevo idioma.
+     */
+    private void cambiarIdioma() {
+        actualizadorTiempo.stop();
+        cronometro.descartar();
+        juego.abandonarPartida();
+        try {
+            App.recargar();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /** Muestra en {@code lblTiempo} los segundos del cronómetro con formato mm:ss. */
@@ -93,22 +108,20 @@ public class AvanzadoController {
     private void volver(ActionEvent event) throws IOException {
         actualizadorTiempo.stop();
         cronometro.descartar();
-        Parent root = FXMLLoader.load(
-            getClass().getResource("/co/edu/poli/all10prueba/escenario1.fxml"));
-        ((Node) event.getSource()).getScene().setRoot(root);
+        App.setRoot("escenario1");
     }
-    
+
     /**
-     * Asigna a los 4 botones numéricos los números generados para el día actual.
-     * Son los mismos que ve el jugador en el escenario principal.
+     * Asigna a los 4 botones numéricos los números generados para la partida.
      */
     private void mostrarNumerosDelDia() {
-    	List<Integer> numeros = Numeros.aleatorios();
+        List<Integer> numeros = Numeros.aleatorios();
         Button[] botones = { btnNum1, btnNum2, btnNum3, btnNum4 };
         for (int i = 0; i < botones.length; i++) {
             botones[i].setText(String.valueOf(numeros.get(i)));
         }
     }
+
     /**
      * Captura el clic en números y operadores. El botón {@code xʸ} agrega {@code ^}.
      * Si es uno de los 4 números, lo marca como usado y lo deshabilita.
@@ -131,7 +144,7 @@ public class AvanzadoController {
         lblExpresion.setText(juego.getExpresion());
         reiniciarRespuesta();
     }
-    
+
     /**
      * Elimina el último símbolo de la expresión y libera el número si era uno de los 4.
      *
@@ -144,7 +157,7 @@ public class AvanzadoController {
         actualizarBotonesNumericos();
         reiniciarRespuesta();
     }
-    
+
     /**
      * Evalúa la operación. Si da un entero entre 1 y 10, marca el objetivo como
      * completado; al completar los 10, detiene el reloj.
@@ -161,24 +174,24 @@ public class AvanzadoController {
             if (juego.isPartidaTerminada()) {
                 actualizadorTiempo.stop();
                 actualizarLabelTiempo();
-                mostrarRespuesta("🏆", "¡Completado en " + juego.getTiempoFinal() + " s!",
+                mostrarRespuesta("🏆", GestorIdioma.get("juego.completadoEn", juego.getTiempoFinal()),
                         "icono-respuesta-ok");
             } else {
-                mostrarRespuesta("✔", "¡Correcto! Objetivo " + paso, "icono-respuesta-ok");
+                mostrarRespuesta("✔", GestorIdioma.get("juego.correcto", paso), "icono-respuesta-ok");
             }
         } else if ("Error".equals(juego.getExpresion())) {
-            mostrarRespuesta("✖", "Operación inválida", "icono-respuesta-error");
+            mostrarRespuesta("✖", GestorIdioma.get("juego.invalida"), "icono-respuesta-error");
         } else if (!juego.todosLosNumerosUsados()) {
             if (juego.cantidadNumerosUsados() < 2) {
-                mostrarRespuesta("!", "Usa al menos 2 números", "icono-respuesta-error");
+                mostrarRespuesta("!", GestorIdioma.get("juego.minimo"), "icono-respuesta-error");
             } else {
-                mostrarRespuesta("=", "Resultado: " + juego.getExpresion(), null);
+                mostrarRespuesta("=", GestorIdioma.get("juego.resultado", juego.getExpresion()), null);
             }
         } else {
-            mostrarRespuesta("✖", "Incorrecto", "icono-respuesta-error");
+            mostrarRespuesta("✖", GestorIdioma.get("juego.incorrecto"), "icono-respuesta-error");
         }
     }
-    
+
     /** Marca un objetivo (1 a 10) como completado cambiando su estilo y su texto. */
     private void marcarPasoComoCompletado(int numeroPaso) {
         Button btn = arregloPasos[numeroPaso - 1];
@@ -188,7 +201,7 @@ public class AvanzadoController {
         }
         btn.setText("✔");
     }
-    
+
     /** Muestra en la tarjeta de respuesta un icono, un texto y el estilo (ok o error). */
     private void mostrarRespuesta(String icono, String texto, String estilo) {
         lblIconoRespuesta.getStyleClass().removeAll("icono-respuesta-ok", "icono-respuesta-error");
@@ -196,12 +209,12 @@ public class AvanzadoController {
         lblIconoRespuesta.setText(icono);
         lblRespuesta.setText(texto);
     }
-    
+
     /** Devuelve la tarjeta de respuesta a su estado inicial. */
     private void reiniciarRespuesta() {
-        mostrarRespuesta("?", "Tu respuesta", null);
+        mostrarRespuesta("?", GestorIdioma.get("juego.respuesta"), null);
     }
-    
+
     /** Sincroniza los 4 botones numéricos con el modelo: deshabilita los usados. */
     private void actualizarBotonesNumericos() {
         Button[] nums = botonesNumericos();
@@ -209,7 +222,7 @@ public class AvanzadoController {
             nums[i].setDisable(juego.estaUsado(i));
         }
     }
-    
+
     /** Devuelve los 4 botones numéricos en orden (índices 0 a 3 del modelo). */
     private Button[] botonesNumericos() {
         return new Button[]{ btnNum1, btnNum2, btnNum3, btnNum4 };

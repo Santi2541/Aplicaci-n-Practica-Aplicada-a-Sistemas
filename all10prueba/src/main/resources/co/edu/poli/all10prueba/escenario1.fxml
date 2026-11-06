@@ -3,20 +3,28 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="650.0" prefWidth="476.0" spacing="15.0" styleClass="root-container" 
-	stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" 
+<VBox alignment="TOP_CENTER" prefHeight="685.0" prefWidth="476.0" spacing="15.0" styleClass="root-container"
+	stylesheets="@style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="co.edu.poli.all10.controller.Controlador">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>	
+   </padding>
    <children>
-      
+
+      <!-- SELECTOR DE IDIOMA -->
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <MenuButton fx:id="btnIdioma" styleClass="btn-idioma" text="🌐" />
+         </children>
+      </HBox>
+
       <!-- BLOQUE SUPERIOR: Encabezado -->
       <HBox alignment="CENTER" prefHeight="64.0" prefWidth="436.0" spacing="10.0">
          <children>
@@ -24,12 +32,12 @@
             <VBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="90.0">
                <children>
                   <Label fx:id="lblTiempo" prefHeight="24.0" prefWidth="86.0" styleClass="texto-tiempo" text="⏰ 00:00" textFill="#7c3aed" />
-                  <Label styleClass="subtexto-gris" text="TIEMPO" textFill="#a78bfa" />
+                  <Label styleClass="subtexto-gris" text="%juego.tiempo" textFill="#a78bfa" />
                </children>
             </VBox>
-            
+
             <Region prefHeight="37.0" prefWidth="13.0" HBox.hgrow="ALWAYS" />
-            
+
             <!-- Título Central -->
             <VBox alignment="CENTER" prefWidth="112.0">
                <children>
@@ -38,56 +46,52 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label styleClass="subtexto-gris" text="Operaciones combinadas" />
+                  <Label styleClass="subtexto-gris" text="%app.subtitulo" />
                </children>
             </VBox>
-            
+
             <Region prefHeight="34.0" prefWidth="0.0" HBox.hgrow="ALWAYS" />
-            
+
             <!-- Sección Pistas -->
             <HBox alignment="CENTER" spacing="5.0" styleClass="card-pistas">
                <children>
-                  <Label text="💡 Pistas" textFill="#fcd34d" />
+                  <Label text="%juego.pistas" textFill="#fcd34d" />
                   <Label text="⚪ ⚪ ⚪" />
                </children>
             </HBox>
          </children>
       </HBox>
-      
-      <TitledPane animated="true" expanded="false" styleClass="desplegable-reglas" text="📖 Reglas del Juego">
-		   <content>
-		      <VBox spacing="8.0">
-		         <children>
-		            <Label text="1. Cada objetivo da la misma cantidad de puntos." wrapText="true" />
-		            <Label text="-&gt; Each target awards the same amount of points." wrapText="true" />
-		            <Label text="2. El proceso parcial se pierde al salir." wrapText="true" />
-		            <Label text="-&gt; Partial progress is lost when the player leaves." wrapText="true" />
-		            <Label text="3. No se pierden puntos." wrapText="true" />
-		            <Label text="-&gt; No points are lost." wrapText="true" />
-		            <Label text="4. El jugador puede seguir intentando un objetivo siempre que quiera." wrapText="true" />
-		            <Label text="-&gt; The player can keep trying a target indefinitely." wrapText="true" />
-		         </children>
-		      </VBox>
-		   </content>
-		</TitledPane>
+
+      <TitledPane animated="true" expanded="false" styleClass="desplegable-reglas" text="%juego.reglas.titulo">
+         <content>
+            <VBox spacing="8.0">
+               <children>
+                  <Label text="%juego.regla1" wrapText="true" />
+                  <Label text="%juego.regla2" wrapText="true" />
+                  <Label text="%juego.regla3" wrapText="true" />
+                  <Label text="%juego.regla4" wrapText="true" />
+               </children>
+            </VBox>
+         </content>
+      </TitledPane>
 
       <!-- MÓDULO DE OBJETIVOS / PASOS -->
       <VBox spacing="8.0" styleClass="card-blanca">
          <children>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label styleClass="titulo-seccion-morado" text="OBJETIVOS" textFill="#7c3aed" />
+                  <Label styleClass="titulo-seccion-morado" text="%juego.objetivos" textFill="#7c3aed" />
                   <Region HBox.hgrow="ALWAYS" />
                   <!-- Leyenda Superior -->
                   <HBox spacing="10.0">
                      <children>
-                        <Label styleClass="leyenda-item" text="✔ Completado" textFill="#22c55e" />
-                        <Label styleClass="leyenda-item" text="⚪ Pendiente" />
+                        <Label styleClass="leyenda-item" text="%juego.completado" textFill="#22c55e" />
+                        <Label styleClass="leyenda-item" text="%juego.pendiente" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            
+
             <!-- Numeros del 1 al 10 -->
             <HBox alignment="CENTER" spacing="6.0">
                <children>
@@ -112,25 +116,25 @@
             <!-- Área de la Operación -->
             <VBox styleClass="card-operacion" HBox.hgrow="ALWAYS">
                <children>
-                  <Label fx:id="lblPasoInfo" styleClass="texto-paso-verde" text="TU OPERACIÓN ES:" />
+                  <Label fx:id="lblPasoInfo" styleClass="texto-paso-verde" text="%juego.operacion" />
                   <Label fx:id="lblExpresion" styleClass="texto-expresion" />
                </children>
             </VBox>
-            
+
             <!-- Área de Resultado / Feedback -->
             <VBox alignment="CENTER" minWidth="120.0" spacing="4.0" styleClass="card-respuesta">
-			   <children>
-			      <Label fx:id="lblIconoRespuesta" styleClass="icono-respuesta" text="?" />
-			      <Label fx:id="lblRespuesta" styleClass="microcopia" text="Tu respuesta" />
-			   </children>
-			</VBox>
+               <children>
+                  <Label fx:id="lblIconoRespuesta" styleClass="icono-respuesta" text="?" />
+                  <Label fx:id="lblRespuesta" styleClass="microcopia" text="%juego.respuesta" />
+               </children>
+            </VBox>
          </children>
       </HBox>
 
       <!-- TECLADO INTERACTIVO: NÚMEROS -->
       <VBox spacing="5.0">
          <children>
-            <Label styleClass="titulo-subseccion" text="NÚMEROS" />
+            <Label styleClass="titulo-subseccion" text="%juego.numeros" />
             <HBox alignment="CENTER" spacing="12.0">
                <children>
                   <Button fx:id="btnNum1" maxWidth="1.0E38" onAction="#presionarBoton" styleClass="btn-num, num-1" text="3" HBox.hgrow="ALWAYS" />
@@ -139,14 +143,14 @@
                   <Button fx:id="btnNum4" maxWidth="1.0E38" onAction="#presionarBoton" styleClass="btn-num, num-4" text="2" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <Label styleClass="microcopia" text="👆 Toca un número para agregarlo a la operación" />
+            <Label styleClass="microcopia" text="%juego.numeros.ayuda" />
          </children>
       </VBox>
 
       <!-- TECLADO INTERACTIVO: OPERACIONES Y ACCIONES -->
       <VBox spacing="5.0">
          <children>
-            <Label styleClass="titulo-subseccion" text="OPERACIONES" />
+            <Label styleClass="titulo-subseccion" text="%juego.operaciones" />
             <HBox alignment="CENTER" spacing="8.0">
                <children>
                   <Button onAction="#presionarBoton" styleClass="btn-operador" text="+" HBox.hgrow="ALWAYS" />
@@ -157,15 +161,15 @@
                   <Button onAction="#presionarBoton" styleClass="btn-operador" text=")" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <Label styleClass="microcopia" text="👆 Toca una operación para usarla" />
-            
-            <!-- Botones de Acción (Borrar, Limpiar, Verificar) -->
+            <Label styleClass="microcopia" text="%juego.operaciones.ayuda" />
+
+            <!-- Botones de Acción (Borrar, Limpiar, Verificar, Abandonar) -->
             <HBox alignment="CENTER" spacing="12.0">
                <children>
-                  <Button fx:id="btnBorrar" maxWidth="1.0E38" onAction="#borrarUltimo" styleClass="btn-accion, btn-borrar" text="⌫ Borrar" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="btnLimpiar" maxWidth="1.0E38" onAction="#limpiarTodo" styleClass="btn-accion, btn-limpiar" text="✕ Limpiar" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="btnVerificar" maxWidth="1.0E38" onAction="#calcularResultado" styleClass="btn-accion, btn-verificar" text="✓ Verificar" HBox.hgrow="ALWAYS" />
-                  <Button maxWidth="1.0E38" onAction="#abandonarTablero" styleClass="btn-accion, btn-limpiar" text="🚪 Abandonar" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnBorrar" maxWidth="1.0E38" onAction="#borrarUltimo" styleClass="btn-accion, btn-borrar" text="%juego.borrar" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnLimpiar" maxWidth="1.0E38" onAction="#limpiarTodo" styleClass="btn-accion, btn-limpiar" text="%juego.limpiar" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="btnVerificar" maxWidth="1.0E38" onAction="#calcularResultado" styleClass="btn-accion, btn-verificar" text="%juego.verificar" HBox.hgrow="ALWAYS" />
+                  <Button maxWidth="1.0E38" onAction="#abandonarTablero" styleClass="btn-accion, btn-limpiar" text="%juego.abandonar" HBox.hgrow="ALWAYS" />
                </children>
                <VBox.margin>
                   <Insets top="8.0" />
@@ -174,20 +178,7 @@
          </children>
       </VBox>
 
-      <!-- PIE DE PÁGINA: LEYENDA -->
-      <HBox alignment="CENTER" spacing="15.0" styleClass="footer-leyenda">
-         <children>
-            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="✔ Correcto" /><Label styleClass="subtexto-gris" text="Respuesta correcta" /></children></VBox>
-            <Label text="|" />
-            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="✖ Incorrecto" /><Label styleClass="subtexto-gris" text="Respuesta incorrecta" /></children></VBox>
-            <Label text="|" />
-            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="💡 Pista usada" /><Label styleClass="subtexto-gris" text="Usaste una pista" /></children></VBox>
-            <Label text="|" />
-            <VBox alignment="CENTER"><children><Label styleClass="lbl-bold" text="👆 Seleccionado" /><Label styleClass="subtexto-gris" text="Elemento en uso" /></children></VBox>
-         </children>
-      </HBox>
-      
-     <Button fx:id="btnDificultad" maxWidth="1.0E38" onAction="#abrirDificultad" styleClass="btn-accion, btn-dificultad" text="🔥 Probar nueva dificultad" />
-        
+      <Button fx:id="btnDificultad" maxWidth="1.0E38" onAction="#abrirDificultad" styleClass="btn-accion, btn-dificultad" text="%juego.dificultad" />
+
    </children>
 </VBox>

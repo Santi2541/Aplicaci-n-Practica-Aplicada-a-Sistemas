@@ -2,6 +2,7 @@ package co.edu.poli.all10.vista;
 
 import java.io.IOException;
 
+import co.edu.poli.all10.modelo.GestorIdioma;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,10 +13,12 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
+    private static String fxmlActual = "registro";
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("registro"));
+        scene = new Scene(loadFXML(fxmlActual));
+        stage.setTitle("AllTen");
         stage.setScene(scene);
         stage.show();
     }
@@ -28,11 +31,22 @@ public class App extends Application {
      */
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+        fxmlActual = fxml;
+    }
+
+    /**
+     * Vuelve a cargar la vista actual con el idioma activo.
+     *
+     * @throws IOException si no se puede cargar el archivo.
+     */
+    public static void recargar() throws IOException {
+        setRoot(fxmlActual);
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(
-                App.class.getResource("/co/edu/poli/all10prueba/" + fxml + ".fxml"));
+                App.class.getResource("/co/edu/poli/all10prueba/" + fxml + ".fxml"),
+                GestorIdioma.getBundle());
         return fxmlLoader.load();
     }
 
