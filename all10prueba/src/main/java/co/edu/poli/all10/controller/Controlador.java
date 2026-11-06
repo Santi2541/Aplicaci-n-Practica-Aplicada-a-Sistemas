@@ -342,7 +342,7 @@ public class Controlador implements Initializable {
      * Los valores definidos en el FXML solo son un valor por defecto.
      */
     private void mostrarNumerosDelDia() {
-        List<Integer> numeros = Numeros.deHoy();
+        List<Integer> numeros = Numeros.aleatorios();
         System.out.println("Números de hoy: " + numeros);
 
         Button[] botones = botonesNumericos();

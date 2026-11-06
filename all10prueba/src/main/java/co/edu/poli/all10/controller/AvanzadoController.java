@@ -103,7 +103,7 @@ public class AvanzadoController {
      * Son los mismos que ve el jugador en el escenario principal.
      */
     private void mostrarNumerosDelDia() {
-        List<Integer> numeros = Numeros.deHoy();
+    	List<Integer> numeros = Numeros.aleatorios();
         Button[] botones = { btnNum1, btnNum2, btnNum3, btnNum4 };
         for (int i = 0; i < botones.length; i++) {
             botones[i].setText(String.valueOf(numeros.get(i)));

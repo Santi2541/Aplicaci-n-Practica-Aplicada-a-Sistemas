@@ -95,4 +95,17 @@ class NumerosTest {
     void deHoyCoincideConLaFechaDelSistema() {
         assertEquals(Numeros.paraFecha(LocalDate.now()), Numeros.deHoy());
     }
+    
+    /** Cada llamada puede dar números distintos, siempre 4 entre 1 y 9. */
+    @Test
+    void aleatoriosDanListasValidasYVariadas() {
+        Set<List<Integer>> distintas = new HashSet<>();
+        for (int i = 0; i < 200; i++) {
+            List<Integer> lista = Numeros.aleatorios();
+            assertEquals(4, lista.size());
+            for (int n : lista) assertTrue(n >= 1 && n <= 9, "Fuera de rango: " + n);
+            distintas.add(lista);
+        }
+        assertTrue(distintas.size() > 1, "Los números no cambian entre llamadas");
+    }
 }

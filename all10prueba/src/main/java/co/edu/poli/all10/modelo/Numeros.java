@@ -22,7 +22,17 @@ public class Numeros {
      * Genera los numeros diarios, si recibe un "false" de @resuelveTodos , entonces genera una nueva lista  
      */
     public static List<Integer> paraFecha(LocalDate fecha) {
-        Random rnd = new Random(fecha.toEpochDay());
+        return generar(new Random(fecha.toEpochDay()));
+    }
+    
+    /** Números nuevos y aleatorios en cada llamada (siempre resolvibles). */
+    public static List<Integer> aleatorios() {
+        return generar(new Random());
+    }
+    
+    /** Genera 4 números hasta que resuelvan los objetivos del 1 al 10. */
+
+    private static List<Integer> generar(Random rnd) {
         while (true) {
             List<Integer> nums = new ArrayList<>();
             for (int i = 0; i < CANTIDAD; i++) nums.add(rnd.nextInt(9) + 1);
