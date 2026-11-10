@@ -113,10 +113,10 @@
       </VBox>
 
       <!-- AYUDA: posibles soluciones por objetivo -->
-      <Button fx:id="btnAyuda" maxWidth="1.0E38" onAction="#onAbrirAyuda" styleClass="btn-accion, btn-pista" text="💡 Ayuda" />
+      <Button fx:id="btnAyuda" maxWidth="1.0E38" onAction="#onAbrirAyuda" styleClass="btn-accion, btn-pista" text="%ayuda.boton" />
       <VBox fx:id="panelAyuda" managed="false" spacing="8.0" styleClass="card-blanca, panel-ayuda" visible="false">
          <children>
-            <Label styleClass="titulo-subseccion" text="Elige un objetivo para ver cómo lograrlo:" />
+            <Label styleClass="titulo-subseccion" text="%ayuda.elegir" />
             <FlowPane fx:id="filaObjetivosAyuda" hgap="6.0" vgap="6.0" />
             <Label fx:id="lblSolucionesAyuda" styleClass="ayuda-soluciones" wrapText="true" />
          </children>

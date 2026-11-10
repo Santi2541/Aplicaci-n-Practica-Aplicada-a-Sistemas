@@ -310,13 +310,14 @@ public class AvanzadoController {
         String texto;
         switch (r.getEstado()) {
             case CON_SOLUCIONES:
-                texto = "Objetivo " + objetivo + ":\n" + String.join("\n", r.getSoluciones());
+                texto = GestorIdioma.get("ayuda.objetivo", objetivo) + "\n"
+                        + String.join("\n", r.getSoluciones());
                 break;
             case SIN_SOLUCION:
-                texto = "No hay solución con estos números";
+                texto = GestorIdioma.get("ayuda.sinSolucion");
                 break;
             default:
-                texto = "Este objetivo ya está resuelto";
+                texto = GestorIdioma.get("ayuda.yaResuelto");
                 break;
         }
         if (lblSolucionesAyuda != null) lblSolucionesAyuda.setText(texto);
