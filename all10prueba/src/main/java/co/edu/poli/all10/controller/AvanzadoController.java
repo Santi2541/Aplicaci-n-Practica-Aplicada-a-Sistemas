@@ -16,6 +16,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.util.Duration;
+import co.edu.poli.all10.modelo.Jugador;
+import co.edu.poli.all10.modelo.SesionActual;
+import javafx.scene.control.Alert;
+import java.sql.SQLException;
+import java.util.Optional;
+
+import co.edu.poli.all10.DAO.JugadorDAO;
+import co.edu.poli.all10.DAO.PartidaDAO;
+import co.edu.poli.all10.modelo.Jugador;
+import co.edu.poli.all10.modelo.SesionActual;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
+
+import java.time.format.DateTimeFormatter;
+import co.edu.poli.all10.modelo.Partida;
+import javafx.scene.control.TextArea;
+import javafx.application.Platform;
 
 /**
  * Controlador de la pantalla de dificultad "Raíz y potencia".
@@ -48,11 +65,20 @@ public class AvanzadoController {
     @FXML private Button btnPaso8;
     @FXML private Button btnPaso9;
     @FXML private Button btnPaso10;
+    
+    @FXML private Button btnExportar;
 
     private final JuegoAllTen juego = new JuegoAllTen();
     private Button[] arregloPasos;
     private Timeline actualizadorTiempo;
     private final Cronometro cronometro = new Cronometro();
+    
+    private static final int OBJETIVOS = 10;
+    
+    private final JugadorDAO jugadorDAO = new JugadorDAO();
+    private final PartidaDAO partidaDAO = new PartidaDAO();
+    private String ultimoNombre;
+    private boolean partidaGuardada = false;
 
     /** JavaFX lo llama solo al cargar el FXML: arranca el reloj. */
     @FXML
@@ -176,6 +202,12 @@ public class AvanzadoController {
                 actualizarLabelTiempo();
                 mostrarRespuesta("🏆", GestorIdioma.get("juego.completadoEn", juego.getTiempoFinal()),
                         "icono-respuesta-ok");
+                btnExportar.setVisible(true);
+                btnExportar.setManaged(true);
+                if (!partidaGuardada) {
+                    partidaGuardada = true;
+                    guardarAlTerminar(OBJETIVOS, juego.getTiempoFinal());
+                }
             } else {
                 mostrarRespuesta("✔", GestorIdioma.get("juego.correcto", paso), "icono-respuesta-ok");
             }
@@ -226,5 +258,135 @@ public class AvanzadoController {
     /** Devuelve los 4 botones numéricos en orden (índices 0 a 3 del modelo). */
     private Button[] botonesNumericos() {
         return new Button[]{ btnNum1, btnNum2, btnNum3, btnNum4 };
+    }
+    
+    /** Exporta una imagen con los resultados de la partida terminada. */
+    @FXML
+    private void exportarImagen(ActionEvent event) {
+        Jugador actual = SesionActual.getJugador();
+        String nombre = (actual != null) ? actual.getNombre() : "AllTen";
+        try {
+            boolean guardada = ExportadorResultados.exportar(
+                    lblExpresion.getScene().getWindow(), nombre,
+                    10 * Jugador.PUNTOS_POR_OBJETIVO, 10, juego.getTiempoFinal());
+            if (guardada) {
+                new Alert(Alert.AlertType.INFORMATION, GestorIdioma.get("export.exito")).showAndWait();
+            }
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, GestorIdioma.get("export.error")).showAndWait();
+        }
+    }
+    
+    /** Guarda el resultado a nombre del jugador con sesión; si no hay sesión, pide el nombre. */
+    private void guardarAlTerminar(int objetivos, int segundos) {
+        Jugador actual = SesionActual.getJugador();
+        if (actual == null) {
+            pedirNombreYGuardar(objetivos, segundos);
+            return;
+        }
+        guardarResultado(actual.getNombre(), objetivos, segundos);
+
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle(GestorIdioma.get("dialogo.titulo"));
+        alerta.setHeaderText(GestorIdioma.get("dialogo.cabecera",
+                objetivos * Jugador.PUNTOS_POR_OBJETIVO, objetivos, segundos));
+        alerta.showAndWait();
+    }
+    
+    /** Pide el nombre con una ventana y guarda el resultado. Solo si no hay sesión. */
+    private void pedirNombreYGuardar(int objetivos, int segundos) {
+        TextInputDialog dialogo = new TextInputDialog();
+        dialogo.setTitle(GestorIdioma.get("dialogo.titulo"));
+        dialogo.setHeaderText(GestorIdioma.get("dialogo.cabecera",
+                objetivos * Jugador.PUNTOS_POR_OBJETIVO, objetivos, segundos));
+        dialogo.setContentText(GestorIdioma.get("dialogo.nombre"));
+        Optional<String> nombre = dialogo.showAndWait();
+        nombre.filter(n -> !n.trim().isEmpty())
+              .ifPresent(n -> guardarResultado(n.trim(), objetivos, segundos));
+    }
+    
+    /** Registra la partida conservando el mejor resultado del jugador y la guarda en la BD. */
+    private void guardarResultado(String nombre, int objetivos, int segundos) {
+        ultimoNombre = nombre;
+        try {
+            Jugador jugador = jugadorDAO.obtenerJugador(nombre);
+            if (jugador == null) jugador = new Jugador(nombre);
+            jugador.registrarPartida(objetivos, segundos);
+            jugadorDAO.guardar(jugador);
+            partidaDAO.guardar(jugador.getNombre(),
+                    objetivos * Jugador.PUNTOS_POR_OBJETIVO, objetivos, segundos);
+        } catch (SQLException e) {
+            System.err.println("No se pudo guardar el resultado: " + e.getMessage());
+        }
+    }
+    
+    /** Borra toda la expresión y libera los 4 números para un nuevo intento. */
+    @FXML
+    private void limpiarTodo(ActionEvent event) {
+        juego.limpiar();
+        lblExpresion.setText("");
+        actualizarBotonesNumericos();
+        reiniciarRespuesta();
+    }
+    
+    
+    /** Abandona la partida: no se registra tiempo ni puntaje y se cierra la aplicación. */
+    @FXML
+    private void abandonarTablero(ActionEvent event) {
+        actualizadorTiempo.stop();
+        cronometro.descartar();
+        juego.abandonarPartida();
+        Platform.exit();
+    }
+    
+    /** Cierra la sesión: detiene el reloj, descarta la partida y vuelve al inicio de sesión. */
+    @FXML
+    private void cerrarSesion(ActionEvent event) {
+        actualizadorTiempo.stop();
+        cronometro.descartar();
+        juego.abandonarPartida();
+        SesionActual.cerrar();
+        try {
+            App.setRoot("registro");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /** Muestra mejor puntaje, mejor tiempo, posición e historial del jugador con sesión. */
+    @FXML
+    private void verMisResultados(ActionEvent event) {
+        Jugador actual = SesionActual.getJugador();
+        if (actual == null) return;
+        try {
+            Jugador datos = jugadorDAO.obtenerJugador(actual.getNombre());
+            if (datos == null) return;
+            int posicion = jugadorDAO.obtenerPosicion(actual.getNombre());
+            List<Partida> partidas = jugadorDAO.listarPartidas(actual.getNombre());
+
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            StringBuilder sb = new StringBuilder();
+            if (partidas.isEmpty()) {
+                sb.append(GestorIdioma.get("sesion.historial.vacio"));
+            }
+            for (Partida p : partidas) {
+                sb.append(GestorIdioma.get("sesion.historial.linea",
+                        p.getPuntaje(), p.getObjetivosCompletados(), p.getTiempo(),
+                        p.getFecha().format(formato))).append("\n");
+            }
+
+            TextArea area = new TextArea(sb.toString());
+            area.setEditable(false);
+            area.setPrefRowCount(10);
+
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle(GestorIdioma.get("sesion.resultados.titulo"));
+            alerta.setHeaderText(GestorIdioma.get("sesion.resultados.cabecera",
+                    datos.getPuntaje(), datos.getMejorTiempo(), posicion));
+            alerta.getDialogPane().setContent(area);
+            alerta.showAndWait();
+        } catch (SQLException e) {
+            System.err.println("No se pudieron consultar los resultados: " + e.getMessage());
+        }
     }
 }

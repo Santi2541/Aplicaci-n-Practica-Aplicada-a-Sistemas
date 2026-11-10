@@ -65,6 +65,11 @@ public class Controlador implements Initializable {
     @FXML private Button btnPaso8;
     @FXML private Button btnPaso9;
     @FXML private Button btnPaso10;
+    
+    @FXML private Button btnExportar;
+    private String ultimoNombre;
+    private int ultimosObjetivos;
+    private int ultimosSegundos;
 
     private Button[] arregloPasos;
     private Timeline actualizadorTiempo;
@@ -376,20 +381,12 @@ public class Controlador implements Initializable {
         }
     }
 
-    /**
-     * Abandona la partida actual: detiene el reloj y reinicia la entrada.
-     * No se registra tiempo ni se guarda puntaje.
-     */
+    /** Abandona la partida: no se registra tiempo ni puntaje y se cierra la aplicación. */
     @FXML
     public void abandonarTablero() {
         detenerActualizadorTiempo();
         juego.abandonarPartida();
-        juego.limpiar();
-        java.util.Arrays.fill(pasosLogrados, false);
-        lblExpresion.setText("");
-        actualizarBotonesNumericos();
-        actualizarLabelTiempo();     // vuelve a 00:00
-        System.out.println("Partida abandonada: no se registra tiempo.");
+        javafx.application.Platform.exit();
     }
 
     /** Carga todos los jugadores guardados en la BD al ranking en memoria. */
@@ -411,6 +408,7 @@ public class Controlador implements Initializable {
      * @param segundos  Tiempo de la partida en segundos.
      */
     private void guardarResultado(String nombre, int objetivos, int segundos) {
+    	habilitarExportacion(nombre, objetivos, segundos);
         Jugador jugador = ranking.registrarPartida(nombre, objetivos, segundos);
         try {
             jugadorDAO.guardar(jugador);
@@ -525,5 +523,31 @@ public class Controlador implements Initializable {
     private void abrirDificultad(ActionEvent event) throws IOException {
         detenerActualizadorTiempo();
         App.setRoot("escenario2");
+    }
+    
+    /** Recuerda el resultado de la partida y muestra el botón para exportarlo. */
+    private void habilitarExportacion(String nombre, int objetivos, int segundos) {
+        ultimoNombre = nombre;
+        ultimosObjetivos = objetivos;
+        ultimosSegundos = segundos;
+        if (btnExportar != null) {
+            btnExportar.setVisible(true);
+            btnExportar.setManaged(true);
+        }
+    }
+    
+    /** Exporta la imagen con los resultados de la última partida terminada. */
+    @FXML
+    private void exportarImagen(ActionEvent event) {
+        try {
+            boolean guardada = ExportadorResultados.exportar(
+                    lblExpresion.getScene().getWindow(), ultimoNombre,
+                    ultimosObjetivos * Jugador.PUNTOS_POR_OBJETIVO, ultimosObjetivos, ultimosSegundos);
+            if (guardada) {
+                new Alert(Alert.AlertType.INFORMATION, GestorIdioma.get("export.exito")).showAndWait();
+            }
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, GestorIdioma.get("export.error")).showAndWait();
+        }
     }
 }
