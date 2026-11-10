@@ -20,6 +20,7 @@
       <!-- SELECTOR DE IDIOMA -->
       <HBox alignment="CENTER_RIGHT" spacing="8.0">
 		   <children>
+		      <Button onAction="#verRanking" styleClass="btn-idioma" text="%ranking.boton" />
 		      <Button onAction="#verMisResultados" styleClass="btn-idioma" text="%sesion.resultados" />
 		      <Button onAction="#cerrarSesion" styleClass="btn-idioma" text="%sesion.cerrar" />
 		      <MenuButton fx:id="btnIdioma" styleClass="btn-idioma" text="🌐" />

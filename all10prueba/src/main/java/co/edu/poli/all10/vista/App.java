@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /** Clase principal de la aplicación AllTen: carga la vista FXML inicial. */
@@ -41,6 +42,22 @@ public class App extends Application {
      */
     public static void recargar() throws IOException {
         setRoot(fxmlActual);
+    }
+
+    /**
+     * Abre una vista en una ventana modal sin cerrar la actual.
+     *
+     * @param fxml   Nombre del FXML, sin extensión.
+     * @param titulo Título de la ventana.
+     * @throws IOException si no se puede cargar el archivo.
+     */
+    public static void abrirVentana(String fxml, String titulo) throws IOException {
+        Stage ventana = new Stage();
+        ventana.initOwner(scene.getWindow());
+        ventana.initModality(Modality.WINDOW_MODAL);
+        ventana.setTitle(titulo);
+        ventana.setScene(new Scene(loadFXML(fxml)));
+        ventana.showAndWait();
     }
 
     private static Parent loadFXML(String fxml) throws IOException {

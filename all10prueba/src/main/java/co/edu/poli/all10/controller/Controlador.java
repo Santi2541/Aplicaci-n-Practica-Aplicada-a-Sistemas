@@ -481,6 +481,16 @@ public class Controlador implements Initializable {
         }
     }
 
+    /** Abre la ventana con el ranking por velocidad y el historial de partidas. */
+    @FXML
+    private void verRanking(ActionEvent event) {
+        try {
+            App.abrirVentana("ranking", GestorIdioma.get("ranking.titulo"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /** Muestra mejor puntaje, mejor tiempo, posición e historial del jugador con sesión. */
     @FXML
     private void verMisResultados(ActionEvent event) {

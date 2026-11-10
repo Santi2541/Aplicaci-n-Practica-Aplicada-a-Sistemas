@@ -1,38 +1,33 @@
 package co.edu.poli.all10.controller;
 
 import java.io.IOException;
-import java.util.List;
-
-import co.edu.poli.all10.modelo.Cronometro;
-import co.edu.poli.all10.modelo.GestorIdioma;
-import co.edu.poli.all10.modelo.JuegoAllTen;
-import co.edu.poli.all10.modelo.Numeros;
-import co.edu.poli.all10.vista.App;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.util.Duration;
-import co.edu.poli.all10.modelo.Jugador;
-import co.edu.poli.all10.modelo.SesionActual;
-import javafx.scene.control.Alert;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import co.edu.poli.all10.DAO.JugadorDAO;
 import co.edu.poli.all10.DAO.PartidaDAO;
+import co.edu.poli.all10.modelo.Cronometro;
+import co.edu.poli.all10.modelo.GestorIdioma;
+import co.edu.poli.all10.modelo.JuegoAllTen;
 import co.edu.poli.all10.modelo.Jugador;
-import co.edu.poli.all10.modelo.SesionActual;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextInputDialog;
-
-import java.time.format.DateTimeFormatter;
+import co.edu.poli.all10.modelo.Numeros;
 import co.edu.poli.all10.modelo.Partida;
-import javafx.scene.control.TextArea;
+import co.edu.poli.all10.modelo.SesionActual;
+import co.edu.poli.all10.vista.App;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
+import javafx.util.Duration;
 
 /**
  * Controlador de la pantalla de dificultad "Raíz y potencia".
@@ -348,6 +343,16 @@ public class AvanzadoController {
         SesionActual.cerrar();
         try {
             App.setRoot("registro");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** Abre la ventana con el ranking por velocidad y el historial de partidas. */
+    @FXML
+    private void verRanking(ActionEvent event) {
+        try {
+            App.abrirVentana("ranking", GestorIdioma.get("ranking.titulo"));
         } catch (IOException e) {
             e.printStackTrace();
         }

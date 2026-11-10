@@ -9,6 +9,7 @@ import java.util.List;
 
 import co.edu.poli.all10.modelo.Jugador;
 import co.edu.poli.all10.modelo.Partida;
+import co.edu.poli.all10.modelo.RegistroVelocidad;
 
 /** Guarda y consulta jugadores en la tabla jugador y en la vista ranking. */
 public class JugadorDAO {
@@ -199,6 +200,29 @@ public class JugadorDAO {
                     lista.add(new Partida(rs.getInt("puntaje"), rs.getInt("objetivos_completados"),
                             rs.getInt("tiempo"), rs.getTimestamp("fecha").toLocalDateTime()));
                 }
+            }
+        }
+        return lista;
+    }
+
+    /**
+     * Ranking por velocidad: partidas con los 10 objetivos resueltos, de menor a mayor tiempo.
+     *
+     * @return Hasta 50 registros con jugador, tiempo y fecha.
+     * @throws SQLException si falla la consulta.
+     */
+    public List<RegistroVelocidad> listarRankingVelocidad() throws SQLException {
+        String sql = "SELECT j.nombre, p.tiempo, p.fecha "
+                   + "FROM partida p JOIN jugador j ON j.id = p.jugador_id "
+                   + "WHERE p.objetivos_completados = 10 "
+                   + "ORDER BY p.tiempo ASC, p.fecha ASC LIMIT 50";
+        List<RegistroVelocidad> lista = new ArrayList<>();
+        try (Connection c = conexion.obtenerConexion();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(new RegistroVelocidad(rs.getString("nombre"), rs.getInt("tiempo"),
+                        rs.getTimestamp("fecha").toLocalDateTime()));
             }
         }
         return lista;
