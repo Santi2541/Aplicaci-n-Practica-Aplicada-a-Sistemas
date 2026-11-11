@@ -6,6 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import co.edu.poli.all10.modelo.AyudaSoluciones;
+import co.edu.poli.all10.modelo.Evaluador;
+import co.edu.poli.all10.modelo.JuegoAllTen;
+import co.edu.poli.all10.modelo.ResultadoAyuda;
+
 public class AyudaSolucionesTest {
 
     /** Evalúa una solución mostrada con el mismo Evaluador que usa el juego. */
