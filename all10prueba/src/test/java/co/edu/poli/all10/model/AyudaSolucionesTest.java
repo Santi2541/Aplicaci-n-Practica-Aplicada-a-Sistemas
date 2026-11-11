@@ -1,4 +1,4 @@
-package co.edu.poli.all10.modelo;
+package co.edu.poli.all10.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 

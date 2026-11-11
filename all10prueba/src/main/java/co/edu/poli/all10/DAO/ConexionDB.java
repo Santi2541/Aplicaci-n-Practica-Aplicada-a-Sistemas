@@ -13,7 +13,6 @@ public class ConexionDB {
 
     /**
      * Abre una conexión nueva; quien la recibe debe cerrarla.
-     *
      * @return Conexión abierta.
      * @throws SQLException si no se puede conectar.
      */
