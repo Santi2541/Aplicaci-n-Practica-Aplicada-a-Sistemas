@@ -14,6 +14,7 @@ import co.edu.poli.all10.modelo.JuegoAllTen;
 import co.edu.poli.all10.modelo.Jugador;
 import co.edu.poli.all10.modelo.Numeros;
 import co.edu.poli.all10.modelo.Partida;
+import co.edu.poli.all10.modelo.ResultadoAyuda;
 import co.edu.poli.all10.modelo.SesionActual;
 import co.edu.poli.all10.vista.App;
 import javafx.animation.KeyFrame;
@@ -27,6 +28,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 /**
@@ -34,6 +37,8 @@ import javafx.util.Duration;
  * <p>
  * Reutiliza {@link JuegoAllTen} para las reglas (usar los 4 números, objetivos
  * del 1 al 10 y cronómetro); la vista solo refleja lo que informa el modelo.
+ * También muestra la ayuda con posibles soluciones por objetivo (incluyendo
+ * potencia y raíz) y lleva el contador de pistas.
  */
 public class AvanzadoController {
 
@@ -62,6 +67,12 @@ public class AvanzadoController {
     @FXML private Button btnPaso10;
     
     @FXML private Button btnExportar;
+
+    // Ayuda: posibles soluciones por objetivo
+    @FXML private Label lblPistas;
+    @FXML private VBox panelAyuda;
+    @FXML private FlowPane filaObjetivosAyuda;
+    @FXML private Label lblSolucionesAyuda;
 
     private final JuegoAllTen juego = new JuegoAllTen();
     private Button[] arregloPasos;
@@ -133,14 +144,19 @@ public class AvanzadoController {
     }
 
     /**
-     * Asigna a los 4 botones numéricos los números generados para la partida.
+     * Asigna a los 4 botones numéricos los números generados para la partida
+     * y le entrega esos números a la ayuda (nivel avanzado: con potencia y raíz).
      */
     private void mostrarNumerosDelDia() {
         List<Integer> numeros = Numeros.aleatorios();
         Button[] botones = { btnNum1, btnNum2, btnNum3, btnNum4 };
+        int[] arreglo = new int[botones.length];
         for (int i = 0; i < botones.length; i++) {
             botones[i].setText(String.valueOf(numeros.get(i)));
+            arreglo[i] = numeros.get(i);
         }
+        juego.prepararAyuda(arreglo, true);
+        actualizarContadorPistas();
     }
 
     /**
@@ -192,6 +208,7 @@ public class AvanzadoController {
 
         if (paso > 0) {
             marcarPasoComoCompletado(paso);
+            if (panelAyuda != null && panelAyuda.isVisible()) construirSelectorObjetivos();
             if (juego.isPartidaTerminada()) {
                 actualizadorTiempo.stop();
                 actualizarLabelTiempo();
@@ -253,6 +270,64 @@ public class AvanzadoController {
     /** Devuelve los 4 botones numéricos en orden (índices 0 a 3 del modelo). */
     private Button[] botonesNumericos() {
         return new Button[]{ btnNum1, btnNum2, btnNum3, btnNum4 };
+    }
+
+    // ---------------------------------------------------------------
+    // AYUDA: posibles soluciones por objetivo
+    // ---------------------------------------------------------------
+
+    /** Abre o cierra el panel de ayuda con el selector de objetivos. */
+    @FXML
+    private void onAbrirAyuda() {
+        if (panelAyuda == null) return;
+        boolean mostrar = !panelAyuda.isVisible();
+        panelAyuda.setVisible(mostrar);
+        panelAyuda.setManaged(mostrar);
+        if (mostrar) {
+            construirSelectorObjetivos();
+            if (lblSolucionesAyuda != null) lblSolucionesAyuda.setText("");
+        }
+    }
+
+    /** Dibuja los botones 1 al 10; los objetivos ya completados llevan ✓. */
+    private void construirSelectorObjetivos() {
+        if (filaObjetivosAyuda == null) return;
+        filaObjetivosAyuda.getChildren().clear();
+        for (int i = 1; i <= 10; i++) {
+            final int objetivo = i;
+            boolean hecho = juego.isPasoCompletado(i);
+            Button b = new Button(hecho ? i + " ✓" : String.valueOf(i));
+            b.getStyleClass().add("btn-ayuda-objetivo");
+            if (hecho) b.getStyleClass().add("ayuda-completado");
+            b.setOnAction(e -> mostrarAyuda(objetivo));
+            filaObjetivosAyuda.getChildren().add(b);
+        }
+    }
+
+    /** Pide la ayuda al modelo, muestra el resultado y actualiza el contador de pistas. */
+    private void mostrarAyuda(int objetivo) {
+        ResultadoAyuda r = juego.pedirAyuda(objetivo);
+        String texto;
+        switch (r.getEstado()) {
+            case CON_SOLUCIONES:
+                texto = "Objetivo " + objetivo + ":\n" + String.join("\n", r.getSoluciones());
+                break;
+            case SIN_SOLUCION:
+                texto = "No hay solución con estos números";
+                break;
+            default:
+                texto = "Este objetivo ya está resuelto";
+                break;
+        }
+        if (lblSolucionesAyuda != null) lblSolucionesAyuda.setText(texto);
+        actualizarContadorPistas();
+    }
+
+    /** Muestra en pantalla cuántas pistas se han usado. */
+    private void actualizarContadorPistas() {
+        if (lblPistas != null) {
+            lblPistas.setText(String.valueOf(juego.getPistasUsadas()));
+        }
     }
     
     /** Exporta una imagen con los resultados de la partida terminada. */

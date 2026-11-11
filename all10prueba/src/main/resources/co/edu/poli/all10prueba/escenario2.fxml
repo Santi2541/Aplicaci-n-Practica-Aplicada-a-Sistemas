@@ -4,11 +4,12 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="700.0" prefWidth="476.0" spacing="10.0"
+<VBox alignment="TOP_CENTER" prefHeight="780.0" prefWidth="476.0" spacing="10.0"
       styleClass="root-container" stylesheets="@style.css"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="co.edu.poli.all10.controller.AvanzadoController">
@@ -23,11 +24,11 @@
 		      <Button onAction="#verRanking" styleClass="btn-idioma" text="%ranking.boton" />
 		      <Button onAction="#verMisResultados" styleClass="btn-idioma" text="%sesion.resultados" />
 		      <Button onAction="#cerrarSesion" styleClass="btn-idioma" text="%sesion.cerrar" />
-		      <MenuButton fx:id="btnIdioma" styleClass="btn-idioma" text="🌐" />
+		      <MenuButton fx:id="btnIdioma" styleClass="btn-idioma" text="" />
 		   </children>
 		</HBox>
 
-      <!-- ENCABEZADO: tiempo y pistas -->
+      <!-- ENCABEZADO: tiempo y pistas al lado -->
       <HBox alignment="CENTER_LEFT">
          <children>
             <VBox alignment="CENTER_LEFT">
@@ -37,18 +38,13 @@
                </children>
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <VBox alignment="CENTER_RIGHT" spacing="4.0">
+            <!-- Contador de Pistas alineado al lado -->
+            <HBox alignment="CENTER" spacing="5.0" styleClass="card-pistas">
                <children>
-                  <Label styleClass="texto-pistas" text="%juego.pistas" />
-                  <HBox alignment="CENTER_RIGHT" spacing="6.0">
-                     <children>
-                        <Region fx:id="pista1" styleClass="circulo-pista" />
-                        <Region fx:id="pista2" styleClass="circulo-pista" />
-                        <Region fx:id="pista3" styleClass="circulo-pista" />
-                     </children>
-                  </HBox>
+                  <Label text="%juego.pistas" />
+                  <Label fx:id="lblPistas" text="0" />
                </children>
-            </VBox>
+            </HBox>
          </children>
       </HBox>
 
@@ -78,6 +74,18 @@
                   <Button fx:id="btnPaso10" styleClass="btn-paso, paso-actual" text="10" />
                </children>
             </HBox>
+         </children>
+      </VBox>
+
+      <!-- AYUDA: botón grande idéntico al escenario 1 -->
+      <Button fx:id="btnAyuda" maxWidth="1.0E38" onAction="#onAbrirAyuda" styleClass="btn-accion, btn-pista" text="💡 Ayuda" />
+
+      <!-- AYUDA: panel con posibles soluciones por objetivo -->
+      <VBox fx:id="panelAyuda" managed="false" spacing="8.0" styleClass="card-blanca, panel-ayuda" visible="false">
+         <children>
+            <Label styleClass="titulo-subseccion" text="Elige un objetivo para ver cómo lograrlo:" />
+            <FlowPane fx:id="filaObjetivosAyuda" hgap="6.0" vgap="6.0" />
+            <Label fx:id="lblSolucionesAyuda" styleClass="ayuda-soluciones" wrapText="true" />
          </children>
       </VBox>
 
@@ -136,11 +144,10 @@
          </children>
       </VBox>
 
-      <!-- ACCIONES -->
+      <!-- ACCIONES (Sin el botón amarillo de pista) -->
       <HBox alignment="CENTER" spacing="10.0">
          <children>
             <Button fx:id="btnBorrar" maxWidth="1.0E38" onAction="#borrarUltimo" styleClass="btn-accion, btn-borrar" text="%juego.borrar" HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnPista" maxWidth="1.0E38" styleClass="btn-accion, btn-pista" text="%avanzado.pista" HBox.hgrow="ALWAYS" />
             <Button fx:id="btnVerificar" maxWidth="1.0E38" onAction="#calcularResultado" styleClass="btn-accion, btn-verificar" text="%juego.verificar" HBox.hgrow="ALWAYS" />
             <Button maxWidth="1.0E38" onAction="#limpiarTodo" styleClass="btn-accion, btn-limpiar" text="%juego.limpiar" HBox.hgrow="ALWAYS" />
       		<Button maxWidth="1.0E38" onAction="#abandonarTablero" styleClass="btn-accion, btn-limpiar" text="%juego.abandonar" HBox.hgrow="ALWAYS" />

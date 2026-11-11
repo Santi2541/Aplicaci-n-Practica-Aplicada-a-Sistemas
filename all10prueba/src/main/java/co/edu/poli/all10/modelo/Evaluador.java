@@ -17,15 +17,20 @@ public class Evaluador {
      * @throws RuntimeException    si la sintaxis es inválida.
      */
 	public double evaluar(String expresion) {
+        if (expresion == null) return 0;
         String limpia = expresion.trim();
         if (limpia.contains(":")) {
             limpia = limpia.split(":")[1].trim();
         }
+        
+        // Limpieza robusta de operadores visuales
         limpia = limpia.replace("×", "*").replace("÷", "/")
                        .replace("xʸ", "^")
                        .replace("²", "^2").replace("³", "^3");
+
         return evaluarCadenaMatematica(limpia);
     }
+
 	/**
      * Analizador sintáctico de descenso recursivo que evalúa una cadena de texto matemática.
      * Resuelve la ecuación respetando la jerarquía de operadores y el uso de paréntesis.
@@ -55,7 +60,6 @@ public class Evaluador {
             double parse() {
                 nextChar();
                 double x = parseExpression();
-                if (pos < str.length()) throw new RuntimeException("Carácter inesperado: " + (char) ch);
                 return x;
             }
 
@@ -76,6 +80,14 @@ public class Evaluador {
                         double divisor = parseUnary();
                         if (divisor == 0) throw new ArithmeticException("División por cero");
                         x /= divisor;
+                    }
+                    else if (eat('√')) {
+                        // El valor a la izquierda 'x' funciona como el índice de la raíz (ej: ((2+4)/3) √ 9)
+                        double index = x;
+                        double radicando = parseUnary();
+                        if (radicando < 0) throw new ArithmeticException("Raíz de un número negativo");
+                        if (index == 0) throw new ArithmeticException("Índice de raíz cero");
+                        x = Math.pow(radicando, 1.0 / index);
                     }
                     else return x;
                 }
@@ -101,11 +113,7 @@ public class Evaluador {
             }
 
             double parsePrimary() {
-                if (eat('√')) {
-                    double radicando = parsePrimary();
-                    if (radicando < 0) throw new ArithmeticException("Raíz de un número negativo");
-                    return Math.sqrt(radicando);
-                }
+                while (ch == ' ') nextChar();
 
                 double x;
                 int startPos = this.pos;
@@ -113,7 +121,9 @@ public class Evaluador {
                     x = parseExpression();
                     eat(')');
                 } else if ((ch >= '0' && ch <= '9') || ch == '.') {
-                    while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
+                    while ((ch >= '0' && ch <= '9') || ch == '.') {
+                        nextChar();
+                    }
                     x = Double.parseDouble(str.substring(startPos, this.pos));
                 } else {
                     throw new RuntimeException("Sintaxis no válida");

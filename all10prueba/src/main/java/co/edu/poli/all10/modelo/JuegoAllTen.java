@@ -21,6 +21,9 @@ public class JuegoAllTen {
     private String expresion = "";
     private int tiempoFinal = -1;   // -1 = la partida aún no termina
     
+    private final AyudaSoluciones ayuda = new AyudaSoluciones();
+    private final java.util.Set<Integer> objetivosConPista = new java.util.HashSet<>();
+    private int pistasUsadas = 0;
     
     /**
      * Inicia la partida: arranca el cronómetro.
@@ -220,5 +223,55 @@ public class JuegoAllTen {
         for (boolean usado : numerosUsados) if (usado) total++;
         return total;
     }
-    
+  
+    /**
+     * Prepara la ayuda del nivel básico con los cuatro números de la partida
+     * y reinicia el contador de pistas.
+     *
+     * @param numeros Los cuatro números de la partida.
+     */
+    public void prepararAyuda(int[] numeros) {
+        prepararAyuda(numeros, false);
+    }
+
+    /**
+     * Prepara la ayuda con los cuatro números de la partida y reinicia el contador
+     * de pistas. Se llama cada vez que se generan números nuevos.
+     *
+     * @param numeros  Los cuatro números de la partida.
+     * @param avanzado {@code true} si el nivel incluye potencia y raíz.
+     */
+    public void prepararAyuda(int[] numeros, boolean avanzado) {
+        ayuda.calcular(numeros, avanzado);
+        objetivosConPista.clear();
+        pistasUsadas = 0;
+    }
+
+    /**
+     * Pide las soluciones posibles de un objetivo.
+     * <p>
+     * Cuenta como una pista usada solo cuando muestra soluciones y es la primera vez
+     * que se consulta ese objetivo. Si el objetivo ya está completado o no tiene
+     * solución, no cuenta.
+     *
+     * @param objetivo Objetivo del 1 al 10.
+     * @return El resultado de la ayuda (con soluciones, sin solución o ya completado).
+     */
+    public ResultadoAyuda pedirAyuda(int objetivo) {
+        if (isPasoCompletado(objetivo)) {
+            return ResultadoAyuda.yaCompletado(objetivo);
+        }
+        java.util.List<String> soluciones = ayuda.solucionesDe(objetivo);
+        if (soluciones.isEmpty()) {
+            return ResultadoAyuda.sinSolucion(objetivo);
+        }
+        boolean nueva = objetivosConPista.add(objetivo);   // el mismo objetivo no vuelve a sumar
+        if (nueva) pistasUsadas++;
+        return ResultadoAyuda.conSoluciones(objetivo, soluciones, nueva);
+    }
+
+    /** @return Cantidad de pistas usadas en la partida actual. */
+    public int getPistasUsadas() {
+        return pistasUsadas;
+    }
 }
