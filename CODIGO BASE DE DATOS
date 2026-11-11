@@ -6,12 +6,14 @@ DROP VIEW IF EXISTS ranking;
 DROP TABLE IF EXISTS partida;
 DROP TABLE IF EXISTS jugador;
 
--- 2. Crear tabla jugador con todos sus campos (incluyendo credenciales de seguridad)
+-- 2. Crear tabla jugador con todos sus campos (incluyendo credenciales y código de recuperación)
 CREATE TABLE jugador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE,
-    hash VARCHAR(64) NULL, -- Corregido: se llama 'hash' para coincidir con el DAO en Java
+    hash VARCHAR(64) NULL,
     sal VARCHAR(32) NULL,
+    codigo_hash VARCHAR(64) NULL,   -- código de recuperación (hash)
+    codigo_sal VARCHAR(32) NULL,    -- sal del código de recuperación (solo si tu DAO la usa)
     puntaje INT NOT NULL DEFAULT 0,
     objetivos_completados TINYINT NOT NULL DEFAULT 0,
     mejor_tiempo INT NOT NULL DEFAULT 0,
@@ -37,7 +39,7 @@ SELECT RANK() OVER (ORDER BY puntaje DESC, mejor_tiempo ASC) AS posicion,
        nombre, puntaje, objetivos_completados, mejor_tiempo
 FROM jugador;
 
--- 5. Insertar datos de prueba (Los jugadores antiguos tendrán hash y sal en NULL, lo cual es válido)
+-- 5. Insertar datos de prueba (hash, sal y código en NULL)
 INSERT INTO jugador (nombre, puntaje, objetivos_completados, mejor_tiempo) VALUES
 ('Ana', 80, 8, 150),
 ('Luis', 80, 8, 200),
