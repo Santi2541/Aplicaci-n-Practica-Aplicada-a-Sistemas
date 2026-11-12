@@ -60,6 +60,8 @@ public class Evaluador {
             double parse() {
                 nextChar();
                 double x = parseExpression();
+                while (ch == ' ') nextChar();
+                if (ch != -1) throw new RuntimeException("Sintaxis no válida");
                 return x;
             }
 
@@ -119,7 +121,7 @@ public class Evaluador {
                 int startPos = this.pos;
                 if (eat('(')) {
                     x = parseExpression();
-                    eat(')');
+                    if (!eat(')')) throw new RuntimeException("Sintaxis no válida");
                 } else if ((ch >= '0' && ch <= '9') || ch == '.') {
                     while ((ch >= '0' && ch <= '9') || ch == '.') {
                         nextChar();
