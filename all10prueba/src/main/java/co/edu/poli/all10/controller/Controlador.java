@@ -69,7 +69,7 @@ public class Controlador implements Initializable {
     @FXML private Button btnPaso8;
     @FXML private Button btnPaso9;
     @FXML private Button btnPaso10;
-    
+
     @FXML private Button btnExportar;
 
     // Ayuda: posibles soluciones por objetivo
@@ -486,7 +486,7 @@ public class Controlador implements Initializable {
      * @param segundos  Tiempo de la partida en segundos.
      */
     private void guardarResultado(String nombre, int objetivos, int segundos) {
-    	habilitarExportacion(nombre, objetivos, segundos);
+        habilitarExportacion(nombre, objetivos, segundos);
         Jugador jugador = ranking.registrarPartida(nombre, objetivos, segundos);
         try {
             jugadorDAO.guardar(jugador);
@@ -534,6 +534,7 @@ public class Controlador implements Initializable {
         alerta.setTitle(GestorIdioma.get("dialogo.titulo"));
         alerta.setHeaderText(GestorIdioma.get("dialogo.cabecera",
                 objetivos * Jugador.PUNTOS_POR_OBJETIVO, objetivos, segundos));
+        App.estilizar(alerta);
         alerta.showAndWait();
     }
 
@@ -601,6 +602,7 @@ public class Controlador implements Initializable {
             alerta.setHeaderText(GestorIdioma.get("sesion.resultados.cabecera",
                     datos.getPuntaje(), datos.getMejorTiempo(), posicion));
             alerta.getDialogPane().setContent(area);
+            App.estilizar(alerta);
             alerta.showAndWait();
         } catch (SQLException e) {
             System.err.println("No se pudieron consultar los resultados: " + e.getMessage());
@@ -612,7 +614,7 @@ public class Controlador implements Initializable {
         detenerActualizadorTiempo();
         App.setRoot("escenario2");
     }
-    
+
     /** Recuerda el resultado de la partida y muestra el botón para exportarlo. */
     private void habilitarExportacion(String nombre, int objetivos, int segundos) {
         ultimoNombre = nombre;
@@ -623,7 +625,7 @@ public class Controlador implements Initializable {
             btnExportar.setManaged(true);
         }
     }
-    
+
     /** Exporta la imagen con los resultados de la última partida terminada. */
     @FXML
     private void exportarImagen(ActionEvent event) {
@@ -632,10 +634,14 @@ public class Controlador implements Initializable {
                     lblExpresion.getScene().getWindow(), ultimoNombre,
                     ultimosObjetivos * Jugador.PUNTOS_POR_OBJETIVO, ultimosObjetivos, ultimosSegundos);
             if (guardada) {
-                new Alert(Alert.AlertType.INFORMATION, GestorIdioma.get("export.exito")).showAndWait();
+                Alert ok = new Alert(Alert.AlertType.INFORMATION, GestorIdioma.get("export.exito"));
+                App.estilizar(ok);
+                ok.showAndWait();
             }
         } catch (IOException e) {
-            new Alert(Alert.AlertType.ERROR, GestorIdioma.get("export.error")).showAndWait();
+            Alert error = new Alert(Alert.AlertType.ERROR, GestorIdioma.get("export.error"));
+            App.estilizar(error);
+            error.showAndWait();
         }
     }
 }

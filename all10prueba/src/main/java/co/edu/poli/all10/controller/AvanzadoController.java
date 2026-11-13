@@ -65,7 +65,7 @@ public class AvanzadoController {
     @FXML private Button btnPaso8;
     @FXML private Button btnPaso9;
     @FXML private Button btnPaso10;
-    
+
     @FXML private Button btnExportar;
 
     // Ayuda: posibles soluciones por objetivo
@@ -78,9 +78,9 @@ public class AvanzadoController {
     private Button[] arregloPasos;
     private Timeline actualizadorTiempo;
     private final Cronometro cronometro = new Cronometro();
-    
+
     private static final int OBJETIVOS = 10;
-    
+
     private final JugadorDAO jugadorDAO = new JugadorDAO();
     private final PartidaDAO partidaDAO = new PartidaDAO();
     private String ultimoNombre;
@@ -330,7 +330,7 @@ public class AvanzadoController {
             lblPistas.setText(String.valueOf(juego.getPistasUsadas()));
         }
     }
-    
+
     /** Exporta una imagen con los resultados de la partida terminada. */
     @FXML
     private void exportarImagen(ActionEvent event) {
@@ -341,13 +341,17 @@ public class AvanzadoController {
                     lblExpresion.getScene().getWindow(), nombre,
                     10 * Jugador.PUNTOS_POR_OBJETIVO, 10, juego.getTiempoFinal());
             if (guardada) {
-                new Alert(Alert.AlertType.INFORMATION, GestorIdioma.get("export.exito")).showAndWait();
+                Alert ok = new Alert(Alert.AlertType.INFORMATION, GestorIdioma.get("export.exito"));
+                App.estilizar(ok);
+                ok.showAndWait();
             }
         } catch (IOException e) {
-            new Alert(Alert.AlertType.ERROR, GestorIdioma.get("export.error")).showAndWait();
+            Alert error = new Alert(Alert.AlertType.ERROR, GestorIdioma.get("export.error"));
+            App.estilizar(error);
+            error.showAndWait();
         }
     }
-    
+
     /** Guarda el resultado a nombre del jugador con sesión; si no hay sesión, pide el nombre. */
     private void guardarAlTerminar(int objetivos, int segundos) {
         Jugador actual = SesionActual.getJugador();
@@ -361,9 +365,10 @@ public class AvanzadoController {
         alerta.setTitle(GestorIdioma.get("dialogo.titulo"));
         alerta.setHeaderText(GestorIdioma.get("dialogo.cabecera",
                 objetivos * Jugador.PUNTOS_POR_OBJETIVO, objetivos, segundos));
+        App.estilizar(alerta);
         alerta.showAndWait();
     }
-    
+
     /** Pide el nombre con una ventana y guarda el resultado. Solo si no hay sesión. */
     private void pedirNombreYGuardar(int objetivos, int segundos) {
         TextInputDialog dialogo = new TextInputDialog();
@@ -375,7 +380,7 @@ public class AvanzadoController {
         nombre.filter(n -> !n.trim().isEmpty())
               .ifPresent(n -> guardarResultado(n.trim(), objetivos, segundos));
     }
-    
+
     /** Registra la partida conservando el mejor resultado del jugador y la guarda en la BD. */
     private void guardarResultado(String nombre, int objetivos, int segundos) {
         ultimoNombre = nombre;
@@ -390,7 +395,7 @@ public class AvanzadoController {
             System.err.println("No se pudo guardar el resultado: " + e.getMessage());
         }
     }
-    
+
     /** Borra toda la expresión y libera los 4 números para un nuevo intento. */
     @FXML
     private void limpiarTodo(ActionEvent event) {
@@ -399,8 +404,7 @@ public class AvanzadoController {
         actualizarBotonesNumericos();
         reiniciarRespuesta();
     }
-    
-    
+
     /** Abandona la partida: no se registra tiempo ni puntaje y se cierra la aplicación. */
     @FXML
     private void abandonarTablero(ActionEvent event) {
@@ -409,7 +413,7 @@ public class AvanzadoController {
         juego.abandonarPartida();
         Platform.exit();
     }
-    
+
     /** Cierra la sesión: detiene el reloj, descarta la partida y vuelve al inicio de sesión. */
     @FXML
     private void cerrarSesion(ActionEvent event) {
@@ -433,7 +437,7 @@ public class AvanzadoController {
             e.printStackTrace();
         }
     }
-    
+
     /** Muestra mejor puntaje, mejor tiempo, posición e historial del jugador con sesión. */
     @FXML
     private void verMisResultados(ActionEvent event) {
@@ -465,6 +469,7 @@ public class AvanzadoController {
             alerta.setHeaderText(GestorIdioma.get("sesion.resultados.cabecera",
                     datos.getPuntaje(), datos.getMejorTiempo(), posicion));
             alerta.getDialogPane().setContent(area);
+            App.estilizar(alerta);
             alerta.showAndWait();
         } catch (SQLException e) {
             System.err.println("No se pudieron consultar los resultados: " + e.getMessage());

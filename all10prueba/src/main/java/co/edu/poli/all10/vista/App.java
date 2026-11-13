@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -58,6 +59,18 @@ public class App extends Application {
         ventana.setTitle(titulo);
         ventana.setScene(new Scene(loadFXML(fxml)));
         ventana.showAndWait();
+    }
+
+    /**
+     * Aplica la colorimetría de AllTen a un Alert.
+     *
+     * @param alerta Alert a estilizar (llamar antes de showAndWait).
+     */
+    public static void estilizar(Alert alerta) {
+        alerta.getDialogPane().getStylesheets().add(
+                App.class.getResource("/co/edu/poli/all10prueba/style.css").toExternalForm());
+        alerta.getDialogPane().getStyleClass().add("dialogo-allten");
+        alerta.setGraphic(null);
     }
 
     private static Parent loadFXML(String fxml) throws IOException {

@@ -288,6 +288,7 @@ public class RegistroController {
         alerta.setTitle(GestorIdioma.get("registro.codigo.titulo"));
         alerta.setHeaderText(GestorIdioma.get("registro.codigo.encabezado"));
         alerta.setContentText(GestorIdioma.get("registro.codigo.mensaje", bonito));
+        App.estilizar(alerta);
         alerta.showAndWait();
     }
 

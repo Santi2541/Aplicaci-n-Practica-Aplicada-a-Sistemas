@@ -25,9 +25,9 @@
                <content>
                   <TableView fx:id="tblVelocidad">
                      <columns>
-                        <TableColumn fx:id="colPos" maxWidth="50.0" text="%ranking.col.pos" />
-                        <TableColumn fx:id="colJugador" text="%ranking.col.jugador" />
-                        <TableColumn fx:id="colTiempo" maxWidth="80.0" text="%ranking.col.tiempo" />
+                        <TableColumn fx:id="colPos" minWidth="45.0" prefWidth="50.0" maxWidth="60.0" text="%ranking.col.pos" />
+                        <TableColumn fx:id="colJugador" minWidth="100.0" text="%ranking.col.jugador" />
+                        <TableColumn fx:id="colTiempo" minWidth="70.0" prefWidth="80.0" maxWidth="90.0" text="%ranking.col.tiempo" />
                         <TableColumn fx:id="colFecha" minWidth="120.0" text="%ranking.col.fecha" />
                      </columns>
                   </TableView>
@@ -38,9 +38,9 @@
                   <TableView fx:id="tblMias">
                      <columns>
                         <TableColumn fx:id="colMiFecha" minWidth="120.0" text="%ranking.col.fecha" />
-                        <TableColumn fx:id="colMiObjetivos" text="%ranking.col.objetivos" />
-                        <TableColumn fx:id="colMiTiempo" text="%ranking.col.tiempo" />
-                        <TableColumn fx:id="colMiPuntaje" text="%ranking.col.puntaje" />
+                        <TableColumn fx:id="colMiObjetivos" minWidth="70.0" text="%ranking.col.objetivos" />
+                        <TableColumn fx:id="colMiTiempo" minWidth="70.0" text="%ranking.col.tiempo" />
+                        <TableColumn fx:id="colMiPuntaje" minWidth="70.0" text="%ranking.col.puntaje" />
                      </columns>
                   </TableView>
                </content>
