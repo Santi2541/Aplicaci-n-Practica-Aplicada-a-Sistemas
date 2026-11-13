@@ -334,3 +334,40 @@
      -fx-background-color: #B39DDB;
      -fx-text-fill: white;
  }
+ /* ===== Reglas visuales ===== */
+ .regla-card {
+     -fx-background-color: #FFFFFF;
+     -fx-background-radius: 12px;
+     -fx-border-color: #D1C4E9;
+     -fx-border-radius: 12px;
+     -fx-padding: 8;
+     -fx-spacing: 4;
+     -fx-alignment: TOP_CENTER;
+     -fx-pref-width: 98px;
+     -fx-max-width: 98px;
+     -fx-min-height: 125px;
+ }
+ .regla-icono {
+     -fx-min-width: 40px;
+     -fx-min-height: 40px;
+     -fx-max-width: 40px;
+     -fx-max-height: 40px;
+     -fx-background-radius: 50px;
+     -fx-alignment: center;
+     -fx-font-size: 20px;
+ }
+ .regla-morado   { -fx-background-color: #EDE7F6; -fx-text-fill: #512DA8; }
+ .regla-verde    { -fx-background-color: #E8F5E9; -fx-text-fill: #2E7D32; }
+ .regla-rojo     { -fx-background-color: #FFEBEE; -fx-text-fill: #C62828; }
+ .regla-amarillo { -fx-background-color: #FFF9C4; -fx-text-fill: #F57F17; }
+ .regla-titulo {
+     -fx-font-size: 12px;
+     -fx-font-weight: bold;
+     -fx-text-fill: #4A148C;
+     -fx-text-alignment: center;
+ }
+ .regla-texto {
+     -fx-font-size: 10px;
+     -fx-text-fill: #6B6B6B;
+     -fx-text-alignment: center;
+ }

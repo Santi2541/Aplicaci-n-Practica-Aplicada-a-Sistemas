@@ -17,7 +17,7 @@
    </padding>
    <children>
 
-           <!-- SESIÓN E IDIOMA -->
+      <!-- SESIÓN E IDIOMA -->
       <HBox alignment="CENTER_RIGHT" spacing="8.0">
          <children>
             <Button onAction="#verRanking" styleClass="btn-idioma" text="%ranking.boton" />
@@ -64,16 +64,53 @@
          </children>
       </HBox>
 
+      <!-- REGLAS VISUALES -->
       <TitledPane animated="true" expanded="false" styleClass="desplegable-reglas" text="%juego.reglas.titulo">
          <content>
-            <VBox spacing="8.0">
+            <FlowPane hgap="8.0" vgap="8.0">
                <children>
-                  <Label text="%juego.regla1" wrapText="true" />
-                  <Label text="%juego.regla2" wrapText="true" />
-                  <Label text="%juego.regla3" wrapText="true" />
-                  <Label text="%juego.regla4" wrapText="true" />
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-morado" text="🔢" />
+                     <Label styleClass="regla-titulo" text="%regla.1.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.1.texto" wrapText="true" />
+                  </VBox>
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-morado" text="➕" />
+                     <Label styleClass="regla-titulo" text="%regla.2.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.2.texto" wrapText="true" />
+                  </VBox>
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-morado" text="🎯" />
+                     <Label styleClass="regla-titulo" text="%regla.3.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.3.texto" wrapText="true" />
+                  </VBox>
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-verde" text="✔" />
+                     <Label styleClass="regla-titulo" text="%regla.4.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.4.texto" wrapText="true" />
+                  </VBox>
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-amarillo" text="💡" />
+                     <Label styleClass="regla-titulo" text="%regla.5.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.5.texto" wrapText="true" />
+                  </VBox>
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-amarillo" text="⏱" />
+                     <Label styleClass="regla-titulo" text="%regla.6.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.6.texto" wrapText="true" />
+                  </VBox>
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-rojo" text="🚪" />
+                     <Label styleClass="regla-titulo" text="%regla.7.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.7.texto" wrapText="true" />
+                  </VBox>
+                  <VBox styleClass="regla-card">
+                     <Label styleClass="regla-icono, regla-morado" text="🏆" />
+                     <Label styleClass="regla-titulo" text="%regla.8.titulo" wrapText="true" />
+                     <Label styleClass="regla-texto" text="%regla.8.texto" wrapText="true" />
+                  </VBox>
                </children>
-            </VBox>
+            </FlowPane>
          </content>
       </TitledPane>
 
